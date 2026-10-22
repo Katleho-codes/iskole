@@ -1,0 +1,39 @@
+{
+  "name": "@iskole/api",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --clear-screen=false src/server.ts",
+    "build": "tsup src/server.ts --format esm --out-dir dist --clean",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "seed": "tsx seed.ts"
+  },
+  "dependencies": {
+    "@better-auth/prisma-adapter": "1.7.11",
+    "@iskole/shared": "workspace:*",
+    "@prisma/adapter-pg": "7.10.1",
+    "@prisma/client": "7.10.1",
+    "better-auth": "1.7.11",
+    "express": "5.3.0",
+    "express-rate-limit": "8.7.1",
+    "helmet": "8.3.0",
+    "nodemailer": "10.1.7",
+    "pino": "10.4.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.6",
+    "@types/node": "26.6.5",
+    "@types/nodemailer": "8.0.2",
+    "@types/supertest": "7.2.1",
+    "dotenv": "18.0.8",
+    "prisma": "7.10.1",
+    "supertest": "7.3.1",
+    "tsup": "9.0.0",
+    "tsx": "4.23.15",
+    "vitest": "5.0.5"
+  }
+}

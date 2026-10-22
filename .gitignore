@@ -1,0 +1,24 @@
+# Environment and secrets: never commit .env, only .env.example
+.env
+.env.*
+!.env.example
+
+node_modules/
+dist/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+
+# Local upload storage (documents live outside the web root)
+var/
+
+# Logs and test artifacts
+*.log
+pnpm-debug.log*
+playwright-report/
+test-results/
+
+# OS noise
+.DS_Store
+Thumbs.db

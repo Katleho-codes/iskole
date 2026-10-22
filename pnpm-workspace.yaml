@@ -1,0 +1,13 @@
+packages:
+  - apps/*
+  - packages/*
+
+# Pin exact versions (OWASP: Vulnerable Dependency Management).
+saveExact: true
+
+# Dependencies that need their install script (esbuild for tsx/tsup). Reviewed list, not a blanket allow.
+allowBuilds:
+  esbuild: true
+  prisma: true
+  workerd: false
+  "@prisma/engines": true
