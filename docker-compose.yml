@@ -1,0 +1,37 @@
+# Local infrastructure for iskole development.
+# Postgres: the single database behind Prisma.
+# Mailpit: catches all outbound email locally (offer letters, verification links).
+# Start with: docker compose up -d
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: iskole
+      POSTGRES_PASSWORD: iskole
+      POSTGRES_DB: iskole
+    ports:
+      # 5434 avoids clashing with other projects' local databases on this machine.
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U iskole"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  mailpit:
+    image: axllent/mailpit:v1.20
+    restart: unless-stopped
+    ports:
+      - "1025:1025" # SMTP for the API
+      - "8025:8025" # Web UI to read emails during development
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:8025/api/v1/info"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+
+volumes:
+  pgdata:

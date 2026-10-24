@@ -1,0 +1,44 @@
+/*
+ * Design tokens for iskole, defined once (frontend-design skill, pass 1).
+ * Warm, restrained light mode: paper background, one deep accent (pine ink, a nod to the
+ * chalkboard), one warm secondary (ochre). No gradients, no glass, no glow.
+ * Contrast: text and ink on paper clear WCAG AA; ochre is for accents and large text only.
+ */
+@import 'tailwindcss';
+
+@theme {
+  --color-paper: #f7f4ec;
+  --color-paper-raised: #fffdf8;
+  --color-ink: #16413a;
+  --color-ink-deep: #0e2e29;
+  --color-ochre: #c07a26;
+  --color-text: #1e2420;
+  --color-muted: #5f6560;
+  --color-line: #dfd8c8;
+  --color-danger: #a3321f;
+
+  /* next/font sets --font-display and --font-body on <html>; theme keys map to utilities. */
+  --font-title: var(--font-display), Georgia, serif;
+  --font-sans: var(--font-body), system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+
+/* Visible, consistent keyboard focus everywhere. */
+:focus-visible {
+  outline: 2px solid var(--color-ochre);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
