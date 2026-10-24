@@ -71,12 +71,12 @@ jobs:
         run: pnpm build
         env:
           DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
-          BETTER_AUTH_URL: http://localhost:4010
+          BETTER_AUTH_URL: http://localhost:8004
           BETTER_AUTH_SECRET: ci-build-secret-ci-build-secret-1234
           SIGNING_SECRET: ci-signing-secret-ci-signing-32b
           ID_ENCRYPTION_KEY: dGVzdC1lbmNyeXB0aW9uLWtleS0zMi1ieXRlcyE
-          APP_URL: http://localhost:3000
-          API_INTERNAL_URL: http://localhost:4010
+          APP_URL: http://localhost:3004
+          API_INTERNAL_URL: http://localhost:8004
 
   dependency-audit:
     name: Dependency audit

@@ -8,29 +8,29 @@ Rules are the same as the M1 document: a pass needs evidence that was read or ru
 setting remembered from earlier. Anything unverified says so. Anything still open is a fail
 or a documented gap, even when the fix is scheduled.
 
-Date: 2026-10-22. Environment: local development, `next dev` on 3000, Express on 4010,
+Date: 2026-10-22. Environment: local development, `next dev` on 3000, Express on 8004,
 PostgreSQL in Docker.
 
 ## Summary
 
-| # | Check | Verdict |
-|---|---|---|
-| 1 | Authorization by role and ownership on every learner record | Pass |
-| 2 | External input validated before use | Pass, with two typed public GET filters |
-| 3 | No raw or string-built SQL | Pass |
-| 4 | No secret hardcoded or committed | Pass |
-| 5 | No PII or secrets in logs | Pass |
-| 6 | Security headers, CSP and clickjacking | Pass in dev; production static-page CSP remains gap 1 |
-| 7 | File uploads validated by content, size-limited, outside web root | Pass; no AV scan (gap 13) |
-| 8 | Document download authorised and short-lived | Pass |
-| 9 | Idempotency on creating and submitting POSTs | Pass |
-| 10 | CSRF protection on state-changing routes | Pass |
-| 11 | Rate limiting and proxy trust | Pass with a shared-IP caveat (gap 6) |
-| 12 | Generic errors, no stack traces, safe body limits | Pass |
-| 13 | POPIA export and deletion, including files | Pass |
-| 14 | AI boundary: no PII, validated output, graceful fallback | Pass |
-| 15 | No account enumeration | **Fail while email verification is off** (gap 8); pass when enabled |
-| 16 | Dependency hygiene | **Fail on one contained `lodash` advisory** (gap 7) |
+| #   | Check                                                             | Verdict                                                             |
+| --- | ----------------------------------------------------------------- | ------------------------------------------------------------------- |
+| 1   | Authorization by role and ownership on every learner record       | Pass                                                                |
+| 2   | External input validated before use                               | Pass, with two typed public GET filters                             |
+| 3   | No raw or string-built SQL                                        | Pass                                                                |
+| 4   | No secret hardcoded or committed                                  | Pass                                                                |
+| 5   | No PII or secrets in logs                                         | Pass                                                                |
+| 6   | Security headers, CSP and clickjacking                            | Pass in dev; production static-page CSP remains gap 1               |
+| 7   | File uploads validated by content, size-limited, outside web root | Pass; no AV scan (gap 13)                                           |
+| 8   | Document download authorised and short-lived                      | Pass                                                                |
+| 9   | Idempotency on creating and submitting POSTs                      | Pass                                                                |
+| 10  | CSRF protection on state-changing routes                          | Pass                                                                |
+| 11  | Rate limiting and proxy trust                                     | Pass with a shared-IP caveat (gap 6)                                |
+| 12  | Generic errors, no stack traces, safe body limits                 | Pass                                                                |
+| 13  | POPIA export and deletion, including files                        | Pass                                                                |
+| 14  | AI boundary: no PII, validated output, graceful fallback          | Pass                                                                |
+| 15  | No account enumeration                                            | **Fail while email verification is off** (gap 8); pass when enabled |
+| 16  | Dependency hygiene                                                | **Fail on one contained `lodash` advisory** (gap 7)                 |
 
 ## Evidence
 

@@ -1,37 +1,57 @@
-# Local infrastructure for iskole development.
-# Postgres: the single database behind Prisma.
-# Mailpit: catches all outbound email locally (offer letters, verification links).
-# Start with: docker compose up -d
 services:
-  postgres:
+  iskole-db:
     image: postgres:16-alpine
+    container_name: iskole_db
     restart: unless-stopped
+    env_file:
+      - ./apps/api/.env
     environment:
+      POSTGRES_DB: iskole
       POSTGRES_USER: iskole
       POSTGRES_PASSWORD: iskole
-      POSTGRES_DB: iskole
-    ports:
-      # 5434 avoids clashing with other projects' local databases on this machine.
-      - "5434:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - iskole_postgres:/var/lib/postgresql/data
+    networks:
+      - homelab
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U iskole"]
       interval: 5s
       timeout: 3s
       retries: 12
 
-  mailpit:
-    image: axllent/mailpit:v1.20
+  iskole-api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: iskole_api
     restart: unless-stopped
-    ports:
-      - "1025:1025" # SMTP for the API
-      - "8025:8025" # Web UI to read emails during development
-    healthcheck:
-      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:8025/api/v1/info"]
-      interval: 10s
-      timeout: 3s
-      retries: 12
+    env_file:
+      - ./.env
+    depends_on:
+      iskole-db:
+        condition: service_healthy
+    networks:
+      - homelab
+
+  iskole-web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: iskole_web
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      API_INTERNAL_URL: http://iskole-api:8004
+      PORT: 3000
+    depends_on:
+      - iskole-api
+    networks:
+      - homelab
+
+networks:
+  homelab:
+    driver: bridge
 
 volumes:
-  pgdata:
+  iskole_postgres:

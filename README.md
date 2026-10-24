@@ -59,11 +59,11 @@ pnpm --filter @iskole/api exec prisma migrate deploy
 pnpm --filter @iskole/api seed
 
 # 5. Two terminals
-pnpm dev:api   # http://localhost:4010
-pnpm dev:web   # http://localhost:3000
+pnpm dev:api   # http://localhost:8004
+pnpm dev:web   # http://localhost:3004
 ```
 
-Open http://localhost:3000 and create an account. Mailpit, if you want to see reset emails,
+Open http://localhost:3004 and create an account. Mailpit, if you want to see reset emails,
 is at http://localhost:8025.
 
 The test database is separate (`iskole_test`). Create it once:
