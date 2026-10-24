@@ -7,33 +7,13 @@
  * surface here.
  */
 import { Router } from 'express';
-import { z } from 'zod';
+import { BudgetInputSchema, ExpenseInputSchema } from '@iskole/shared';
 import { requireRole, requireSession } from '../middleware/auth';
 import { idempotent } from '../middleware/idempotency';
 import { prisma } from '../lib/prisma';
+import { notFound } from '../lib/http-error';
 
 export const expensesRouter = Router();
-
-const MAX_AMOUNT_RANDS = 1_000_000;
-const CATEGORY_MAX = 60;
-const DESCRIPTION_MAX = 200;
-
-const ExpenseCreateSchema = z
-  .object({
-    category: z.string().trim().min(1).max(CATEGORY_MAX),
-    amount: z.number().positive().max(MAX_AMOUNT_RANDS),
-    description: z.string().trim().max(DESCRIPTION_MAX).optional(),
-    date: z.coerce.date().optional(),
-  })
-  .strict();
-
-const BudgetCreateSchema = z
-  .object({
-    category: z.string().trim().min(1).max(CATEGORY_MAX),
-    amount: z.number().positive().max(MAX_AMOUNT_RANDS),
-    period: z.enum(['MONTHLY', 'WEEKLY', 'YEARLY']).default('MONTHLY'),
-  })
-  .strict();
 
 function toRands(cents: number): number {
   return Math.round(cents) / 100;
@@ -41,6 +21,42 @@ function toRands(cents: number): number {
 
 function toCents(rands: number): number {
   return Math.round(rands * 100);
+}
+
+function serialiseExpense(expense: {
+  id: string;
+  category: string;
+  amountCents: number;
+  description: string | null;
+  remindMe: boolean;
+  spentAt: Date;
+  createdAt: Date;
+}) {
+  return {
+    id: expense.id,
+    category: expense.category,
+    amount: toRands(expense.amountCents),
+    description: expense.description,
+    remindMe: expense.remindMe,
+    date: expense.spentAt,
+    createdAt: expense.createdAt,
+  };
+}
+
+function serialiseBudget(budget: {
+  id: string;
+  category: string;
+  amountCents: number;
+  period: string;
+  updatedAt: Date;
+}) {
+  return {
+    id: budget.id,
+    category: budget.category,
+    amount: toRands(budget.amountCents),
+    period: budget.period,
+    updatedAt: budget.updatedAt,
+  };
 }
 
 expensesRouter.get('/expenses', requireSession, requireRole('STUDENT'), async (req, res, next) => {
@@ -52,16 +68,7 @@ expensesRouter.get('/expenses', requireSession, requireRole('STUDENT'), async (r
       take: 200,
     });
 
-    res.json({
-      expenses: expenses.map((expense) => ({
-        id: expense.id,
-        category: expense.category,
-        amount: toRands(expense.amountCents),
-        description: expense.description,
-        date: expense.spentAt,
-        createdAt: expense.createdAt,
-      })),
-    });
+    res.json({ expenses: expenses.map(serialiseExpense) });
   } catch (error) {
     next(error);
   }
@@ -75,7 +82,7 @@ expensesRouter.post(
   async (req, res, next) => {
     try {
       const userId = req.authUser!.id;
-      const input = ExpenseCreateSchema.parse(req.body);
+      const input = ExpenseInputSchema.parse(req.body);
 
       const expense = await prisma.expense.create({
         data: {
@@ -83,20 +90,34 @@ expensesRouter.post(
           category: input.category,
           amountCents: toCents(input.amount),
           description: input.description ?? null,
+          remindMe: input.remindMe,
           ...(input.date ? { spentAt: input.date } : {}),
         },
       });
 
-      res.status(201).json({
-        expense: {
-          id: expense.id,
-          category: expense.category,
-          amount: toRands(expense.amountCents),
-          description: expense.description,
-          date: expense.spentAt,
-          createdAt: expense.createdAt,
-        },
-      });
+      res.status(201).json({ expense: serialiseExpense(expense) });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+expensesRouter.delete(
+  '/expenses/:id',
+  requireSession,
+  requireRole('STUDENT'),
+  async (req, res, next) => {
+    try {
+      const userId = req.authUser!.id;
+      const id = String(req.params.id);
+      const expense = await prisma.expense.findFirst({ where: { id, userId }, select: { id: true } });
+
+      if (!expense) {
+        return next(notFound('expense not found'));
+      }
+
+      await prisma.expense.delete({ where: { id: expense.id } });
+      res.status(204).send();
     } catch (error) {
       next(error);
     }
@@ -111,15 +132,7 @@ expensesRouter.get('/budgets', requireSession, requireRole('STUDENT'), async (re
       orderBy: [{ period: 'asc' }, { category: 'asc' }],
     });
 
-    res.json({
-      budgets: budgets.map((budget) => ({
-        id: budget.id,
-        category: budget.category,
-        amount: toRands(budget.amountCents),
-        period: budget.period,
-        updatedAt: budget.updatedAt,
-      })),
-    });
+    res.json({ budgets: budgets.map(serialiseBudget) });
   } catch (error) {
     next(error);
   }
@@ -133,7 +146,7 @@ expensesRouter.post(
   async (req, res, next) => {
     try {
       const userId = req.authUser!.id;
-      const input = BudgetCreateSchema.parse(req.body);
+      const input = BudgetInputSchema.parse(req.body);
 
       // One budget per category and period. Re-posting corrects the amount instead of
       // stacking a second limit on the same category.
@@ -154,15 +167,29 @@ expensesRouter.post(
         update: { amountCents: toCents(input.amount) },
       });
 
-      res.status(201).json({
-        budget: {
-          id: budget.id,
-          category: budget.category,
-          amount: toRands(budget.amountCents),
-          period: budget.period,
-          updatedAt: budget.updatedAt,
-        },
-      });
+      res.status(201).json({ budget: serialiseBudget(budget) });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+expensesRouter.delete(
+  '/budgets/:id',
+  requireSession,
+  requireRole('STUDENT'),
+  async (req, res, next) => {
+    try {
+      const userId = req.authUser!.id;
+      const id = String(req.params.id);
+      const budget = await prisma.budget.findFirst({ where: { id, userId }, select: { id: true } });
+
+      if (!budget) {
+        return next(notFound('budget not found'));
+      }
+
+      await prisma.budget.delete({ where: { id: budget.id } });
+      res.status(204).send();
     } catch (error) {
       next(error);
     }

@@ -1,10 +1,17 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { getDict } from '../i18n/strings';
+import { getSessionUser } from '../lib/server-session';
 
 // Landing screen. One primary action, plain language, text-first (low-data friendly).
 const dict = getDict('en');
 
-export default function Home() {
+export default async function Home() {
+  // The verification link signs the learner in and redirects to `/` (better-auth's
+  // default callback). Send a signed-in learner straight into the product instead of
+  // showing them the marketing page again.
+  if (await getSessionUser()) redirect('/dashboard');
+
   return (
     <div className="mx-auto flex min-h-screen max-w-xl flex-col px-6 py-8">
       <header>
@@ -13,7 +20,7 @@ export default function Home() {
 
       <main className="flex flex-1 flex-col justify-center gap-6 py-12">
         <h1 className="font-title text-4xl leading-tight text-ink-deep">{dict.heroTitle}</h1>
-        <p className="max-w-[42ch] text-lg leading-relaxed text-muted">{dict.heroBody}</p>
+        <p className="max-w-[42ch] text-lg leading-relaxed text-muted-foreground">{dict.heroBody}</p>
         <div>
           <Link
             href="/signup"
@@ -24,7 +31,7 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="border-t border-line pt-4 text-sm text-muted">{dict.sampleDataFooter}</footer>
+      <footer className="border-t border-line pt-4 text-sm text-muted-foreground">{dict.sampleDataFooter}</footer>
     </div>
   );
 }

@@ -2,14 +2,35 @@
  * Study plans: turn "you got in" into "here is what a week looks like".
  *
  * The AI writes the blocks, but the request never contains a name, email, phone number or
- * ID number. It carries only academic context: APS, subject marks and chosen fields. The
- * output is Zod-validated before it is stored, and a deterministic plan is used when the
- * model is unavailable, so the screen always has something usable.
+ * ID number. It carries only academic context: APS, subject marks, module difficulty and
+ * availability. The output is Zod-validated before it is stored, and a deterministic plan is
+ * used when the model is unavailable, so the screen always has something usable.
  *
- * Approving is the learner's action: calendar export is refused until a plan is approved.
+ * Approving is the learner's action: the calendar and `.ics` export are refused until a plan
+ * is approved. Calendar reads are expanded from the weekly template in Africa/Johannesburg.
  */
 import { Router } from 'express';
-import { z } from 'zod';
+import { randomUUID } from 'node:crypto';
+import {
+  addDaysToDateKey,
+  calculateAps,
+  johannesburgDateKey,
+  johannesburgLocalToUtc,
+  minutesToTime,
+  startOfWeekDateKey,
+  timeToMinutes,
+  LIMITS,
+  StudyBlockDraftSchema,
+  StudyBlockPatchSchema,
+  StudyBlockSchema,
+  StudyPlanDraftSchema,
+  StudyPlanRequestSchema,
+  type StudyAvailability,
+  type StudyBlock,
+  type StudyBlockDraft,
+  type StudyDay,
+  type StudyModule,
+} from '@iskole/shared';
 import { requireRole, requireSession } from '../middleware/auth';
 import { idempotent } from '../middleware/idempotency';
 import { prisma } from '../lib/prisma';
@@ -17,63 +38,137 @@ import { completeJson, AiInvalidOutputError } from '../lib/ai/json';
 import { AiUnavailableError } from '../lib/ai/client';
 import { assertSafeForPrompt, PromptRejectedError } from '../lib/ai/guard';
 import { badRequest, notFound } from '../lib/http-error';
-import { calculateAps, LIMITS } from '@iskole/shared';
+import { normaliseStudyBlocks } from '../lib/study-blocks';
 
 export const studyPlansRouter = Router();
 
-const DAYS = [
+type Mark = { subject: string; mark: number };
+
+const DEFAULT_AVAILABILITY: StudyAvailability[] = [
   'MONDAY',
   'TUESDAY',
   'WEDNESDAY',
   'THURSDAY',
   'FRIDAY',
-  'SATURDAY',
-  'SUNDAY',
-] as const;
-
-const blockSchema = z.object({
-  day: z.enum(DAYS),
-  task: z.string().trim().min(1).max(160),
-  startTime: z
-    .string()
-    .regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'time must be HH:MM')
-    .optional(),
-  durationMinutes: z.number().int().min(15).max(240).optional(),
-});
-
-const planSchema = z.object({
-  blocks: z.array(blockSchema).min(1).max(20),
-});
-
-type PlanBlock = z.infer<typeof blockSchema>;
-type Plan = z.infer<typeof planSchema>;
+].map((day) => ({
+  day: day as StudyDay,
+  startTime: '17:00',
+  endTime: '19:00',
+}));
 
 const SYSTEM_PROMPT =
   'You build a realistic weekly study plan for a South African learner heading to university. ' +
-  'Use plain language, short tasks, and no more than two blocks per day. Respect the subject ' +
-  'list you are given. Do not invent personal details. Return only the requested JSON.';
+  'Use plain language, short tasks, and no more than two blocks per day. Respect the module ' +
+  'list, difficulty and availability you are given. Spread harder modules across the week. ' +
+  'Do not invent personal details. Return only the requested JSON.';
 
-/** Deterministic plan used when the AI is not configured or returns something invalid. */
-function fallbackPlan(subjects: Array<{ subject: string; mark: number }>): Plan {
-  const ordered = [...subjects].sort((a, b) => a.mark - b.mark).slice(0, 5);
-  const focus = ordered.length > 0 ? ordered : [{ subject: 'Mathematics', mark: 50 }];
-  const days: PlanBlock['day'][] = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
-
-  return {
-    blocks: focus.map((item, index) => ({
-      day: days[index] ?? 'FRIDAY',
-      task: `Review ${item.subject}: work through one past-paper question`,
-      startTime: index % 2 === 0 ? '17:00' : '18:00',
-      durationMinutes: 60,
-    })),
-  };
+function moduleCodeFor(subject: string, index: number): string {
+  const code = subject
+    .toUpperCase()
+    .normalize('NFKD')
+    .replace(/[^A-Z0-9]+/g, '')
+    .slice(0, 14);
+  return code.length >= 2 ? code : `MOD${index + 1}`;
 }
 
-async function generatePlan(userId: string): Promise<Plan> {
+function modulesFromMarks(marks: Mark[]): StudyModule[] {
+  if (marks.length === 0) {
+    return [{ code: 'MATH', name: 'Mathematics', difficulty: 3 }];
+  }
+  return marks.map((item, index) => ({
+    code: moduleCodeFor(item.subject, index),
+    name: item.subject,
+    difficulty:
+      item.mark < 40 ? 5 : item.mark < 50 ? 4 : item.mark < 60 ? 3 : item.mark < 70 ? 2 : 1,
+  }));
+}
+
+function availabilityWindows(requested: StudyAvailability[]): StudyAvailability[] {
+  return requested.length > 0 ? requested : DEFAULT_AVAILABILITY;
+}
+
+function timeSlots(windows: StudyAvailability[]): Array<{ day: StudyDay; startTime: string }> {
+  const slots: Array<{ day: StudyDay; startTime: string }> = [];
+  for (const window of windows) {
+    const start = timeToMinutes(window.startTime);
+    const end = timeToMinutes(window.endTime);
+    // One-hour steps with a 45-minute minimum block. This is a simple, readable schedule,
+    // not a constraint solver; the learner reviews and edits before approving.
+    for (let minute = start; minute + 45 <= end; minute += 60) {
+      slots.push({ day: window.day, startTime: minutesToTime(minute) });
+    }
+  }
+  return slots;
+}
+
+/** Deterministic plan used when the AI is not configured or returns something invalid. */
+function fallbackBlocks(modules: StudyModule[], availability: StudyAvailability[]): StudyBlock[] {
+  const focus = [...modules]
+    .sort((a, b) => b.difficulty - a.difficulty || a.code.localeCompare(b.code))
+    .slice(0, 6);
+  const slots = timeSlots(availabilityWindows(availability));
+  const safeSlots =
+    slots.length > 0
+      ? slots
+      : DEFAULT_AVAILABILITY.map((window) => ({ day: window.day, startTime: window.startTime }));
+
+  return focus.map((module, index) => {
+    const slot = safeSlots[index % safeSlots.length]!;
+    const durationMinutes = Math.min(90, 45 + module.difficulty * 10);
+    return StudyBlockSchema.parse({
+      id: randomUUID(),
+      day: slot.day,
+      task: `Review ${module.name ?? module.code}: work through one past-paper question`,
+      startTime: slot.startTime,
+      durationMinutes,
+      kind: 'PRACTICE',
+      moduleCode: module.code,
+      reason:
+        module.difficulty >= 4
+          ? 'This module needs the most practice, so it gets an early slot.'
+          : 'A steady review block keeps every module in rotation.',
+      completedDates: [],
+      skippedDates: [],
+      status: 'PLANNED',
+    });
+  });
+}
+
+function materialiseDraft(draft: StudyBlockDraft[]): StudyBlock[] {
+  return draft.flatMap((block) => {
+    const parsed = StudyBlockSchema.safeParse({
+      id: randomUUID(),
+      day: block.day,
+      task: block.task,
+      startTime: block.startTime ?? '17:00',
+      durationMinutes: block.durationMinutes ?? 60,
+      kind: block.kind ?? 'STUDY',
+      moduleCode: block.moduleCode,
+      notes: block.notes,
+      reason: block.reason,
+      completedDates: [],
+      skippedDates: [],
+      status: 'PLANNED',
+    });
+    return parsed.success ? [parsed.data] : [];
+  });
+}
+
+async function generatePlan(
+  userId: string,
+  request: { modules: StudyModule[]; availability: StudyAvailability[] },
+): Promise<StudyBlock[]> {
   const [marks, preferences] = await Promise.all([
     prisma.subjectMark.findMany({ where: { userId } }),
     prisma.preference.findUnique({ where: { userId } }),
   ]);
+
+  const modules = request.modules.length > 0 ? request.modules : modulesFromMarks(marks);
+  const availability = availabilityWindows(request.availability);
+
+  if (marks.length === 0 && request.modules.length === 0) {
+    return fallbackBlocks(modules, availability);
+  }
 
   const aps = calculateAps({
     marks: marks.map((mark) => ({
@@ -83,41 +178,70 @@ async function generatePlan(userId: string): Promise<Plan> {
     })),
   });
 
-  if (marks.length === 0) {
-    return fallbackPlan([]);
-  }
-
   try {
     const prompt = assertSafeForPrompt(
       [
         `APS: ${aps.score} of ${aps.maxScore}`,
-        `Subjects and marks: ${marks
-          .map((mark) => `${mark.subject} ${mark.mark}%`)
-          .join(', ')}`,
+        marks.length > 0
+          ? `Subjects and marks: ${marks.map((mark) => `${mark.subject} ${mark.mark}%`).join(', ')}`
+          : 'Subject marks: not captured',
         `Fields of interest: ${preferences?.fields?.join(', ') || 'not set'}`,
         `Study mode: ${preferences?.studyMode ?? 'not set'}`,
+        `Modules: ${modules
+          .map(
+            (module) =>
+              `${module.code} (${module.name ?? 'module'}), difficulty ${module.difficulty}/5${
+                module.examDate ? `, exam ${module.examDate}` : ''
+              }`,
+          )
+          .join('; ')}`,
+        `Available: ${availability
+          .map((window) => `${window.day} ${window.startTime}-${window.endTime}`)
+          .join(', ')}`,
       ].join('\n'),
       LIMITS.maxAiInputChars,
     );
 
     const result = await completeJson({
       system: SYSTEM_PROMPT,
-      user: `${prompt}\n\nWrite one week of study blocks. Focus on the weakest subjects but keep every subject in rotation.`,
-      schema: planSchema,
+      user:
+        `${prompt}\n\nWrite one week of study blocks. Focus on the weakest modules but keep ` +
+        'every module in rotation. Use only the availability windows given. Give each block a ' +
+        'short one-line reason.',
+      schema: StudyPlanDraftSchema,
       schemaName: 'study_plan',
-      maxTokens: 900,
+      maxTokens: 1000,
       temperature: 0.4,
     });
 
-    return result.data;
+    const materialised = materialiseDraft(result.data.blocks);
+    return materialised.length > 0 ? materialised : fallbackBlocks(modules, availability);
   } catch (error) {
     // Same contract as matching: any AI-side failure, including a guard rejection, returns
     // the deterministic plan instead of an error screen.
-    if (error instanceof AiUnavailableError) return fallbackPlan(marks);
-    if (error instanceof AiInvalidOutputError) return fallbackPlan(marks);
-    if (error instanceof PromptRejectedError) return fallbackPlan(marks);
+    if (error instanceof AiUnavailableError) return fallbackBlocks(modules, availability);
+    if (error instanceof AiInvalidOutputError) return fallbackBlocks(modules, availability);
+    if (error instanceof PromptRejectedError) return fallbackBlocks(modules, availability);
     throw error;
   }
+}
+
+function serialisePlan(plan: {
+  id: string;
+  title: string;
+  approved: boolean;
+  blocks: unknown;
+  createdAt: Date;
+  updatedAt: Date;
+}) {
+  return {
+    id: plan.id,
+    title: plan.title,
+    approved: plan.approved,
+    blocks: normaliseStudyBlocks(plan.id, plan.blocks),
+    createdAt: plan.createdAt,
+    updatedAt: plan.updatedAt,
+  };
 }
 
 studyPlansRouter.get('/study-plans', requireSession, requireRole('STUDENT'), async (req, res, next) => {
@@ -129,15 +253,7 @@ studyPlansRouter.get('/study-plans', requireSession, requireRole('STUDENT'), asy
       take: 20,
     });
 
-    res.json({
-      studyPlans: plans.map((plan) => ({
-        id: plan.id,
-        title: plan.title,
-        approved: plan.approved,
-        blocks: plan.blocks,
-        createdAt: plan.createdAt,
-      })),
-    });
+    res.json({ studyPlans: plans.map(serialisePlan) });
   } catch (error) {
     next(error);
   }
@@ -151,25 +267,18 @@ studyPlansRouter.post(
   async (req, res, next) => {
     try {
       const userId = req.authUser!.id;
-      const plan = await generatePlan(userId);
+      const request = StudyPlanRequestSchema.parse(req.body ?? {});
+      const blocks = await generatePlan(userId, request);
 
       const saved = await prisma.studyPlan.create({
         data: {
           userId,
           title: 'Your weekly study plan',
-          blocks: plan.blocks,
+          blocks,
         },
       });
 
-      res.status(201).json({
-        studyPlan: {
-          id: saved.id,
-          title: saved.title,
-          approved: saved.approved,
-          blocks: saved.blocks,
-          createdAt: saved.createdAt,
-        },
-      });
+      res.status(201).json({ studyPlan: serialisePlan(saved) });
     } catch (error) {
       next(error);
     }
@@ -191,19 +300,172 @@ studyPlansRouter.post(
         return next(notFound('study plan not found'));
       }
 
+      const blocks = normaliseStudyBlocks(plan.id, plan.blocks);
+      if (blocks.length === 0) {
+        return next(badRequest('add at least one block before approving this plan'));
+      }
+
       const approved = await prisma.studyPlan.update({
         where: { id: plan.id },
-        data: { approved: true },
+        data: { approved: true, blocks },
       });
 
-      res.json({
-        studyPlan: {
-          id: approved.id,
-          title: approved.title,
-          approved: approved.approved,
-          blocks: approved.blocks,
-        },
+      res.json({ studyPlan: serialisePlan(approved) });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+studyPlansRouter.patch(
+  '/study-plans/:id/blocks/:blockId',
+  requireSession,
+  requireRole('STUDENT'),
+  async (req, res, next) => {
+    try {
+      const userId = req.authUser!.id;
+      const patch = StudyBlockPatchSchema.parse(req.body ?? {});
+      const plan = await prisma.studyPlan.findFirst({
+        where: { id: String(req.params.id), userId },
       });
+
+      if (!plan) return next(notFound('study plan not found'));
+
+      const blocks = normaliseStudyBlocks(plan.id, plan.blocks);
+      const index = blocks.findIndex((block) => block.id === String(req.params.blockId));
+      if (index === -1) return next(notFound('study block not found'));
+
+      const current = blocks[index]!;
+      const nextBlock: StudyBlock = { ...current };
+
+      if (patch.day !== undefined) nextBlock.day = patch.day;
+      if (patch.task !== undefined) nextBlock.task = patch.task;
+      if (patch.startTime !== undefined) nextBlock.startTime = patch.startTime;
+      if (patch.durationMinutes !== undefined) nextBlock.durationMinutes = patch.durationMinutes;
+      if (patch.kind !== undefined) nextBlock.kind = patch.kind;
+      if (patch.moduleCode !== undefined) {
+        if (patch.moduleCode === null) delete nextBlock.moduleCode;
+        else nextBlock.moduleCode = patch.moduleCode;
+      }
+      if (patch.notes !== undefined) {
+        if (patch.notes === null) delete nextBlock.notes;
+        else nextBlock.notes = patch.notes;
+      }
+      if (patch.reason !== undefined) {
+        if (patch.reason === null) delete nextBlock.reason;
+        else nextBlock.reason = patch.reason;
+      }
+
+      if (patch.status !== undefined && patch.date !== undefined) {
+        const completed = new Set(current.completedDates);
+        const skipped = new Set(current.skippedDates);
+
+        if (patch.status === 'DONE') {
+          completed.add(patch.date);
+          skipped.delete(patch.date);
+        } else if (patch.status === 'SKIPPED') {
+          skipped.add(patch.date);
+          completed.delete(patch.date);
+        } else {
+          completed.delete(patch.date);
+          skipped.delete(patch.date);
+        }
+
+        nextBlock.completedDates = [...completed].sort();
+        nextBlock.skippedDates = [...skipped].sort();
+        nextBlock.status = patch.status;
+      }
+
+      const parsed = StudyBlockSchema.safeParse(nextBlock);
+      if (!parsed.success) {
+        return next(badRequest('that block change is not valid'));
+      }
+
+      blocks[index] = parsed.data;
+      const saved = await prisma.studyPlan.update({
+        where: { id: plan.id },
+        data: { blocks },
+      });
+
+      res.json({ studyPlan: serialisePlan(saved), block: parsed.data });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+studyPlansRouter.post(
+  '/study-plans/:id/blocks',
+  requireSession,
+  requireRole('STUDENT'),
+  async (req, res, next) => {
+    try {
+      const userId = req.authUser!.id;
+      const draft = StudyBlockDraftSchema.parse(req.body ?? {});
+      const plan = await prisma.studyPlan.findFirst({
+        where: { id: String(req.params.id), userId },
+      });
+
+      if (!plan) return next(notFound('study plan not found'));
+
+      const blocks = normaliseStudyBlocks(plan.id, plan.blocks);
+      if (blocks.length >= 20) {
+        return next(badRequest('a plan can hold at most 20 blocks'));
+      }
+
+      const block = StudyBlockSchema.parse({
+        id: randomUUID(),
+        day: draft.day,
+        task: draft.task,
+        startTime: draft.startTime ?? '17:00',
+        durationMinutes: draft.durationMinutes ?? 60,
+        kind: draft.kind ?? 'STUDY',
+        moduleCode: draft.moduleCode,
+        notes: draft.notes,
+        reason: draft.reason,
+        completedDates: [],
+        skippedDates: [],
+        status: 'PLANNED',
+      });
+
+      const saved = await prisma.studyPlan.update({
+        where: { id: plan.id },
+        data: { blocks: [...blocks, block] },
+      });
+
+      res.status(201).json({ studyPlan: serialisePlan(saved), block });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+studyPlansRouter.delete(
+  '/study-plans/:id/blocks/:blockId',
+  requireSession,
+  requireRole('STUDENT'),
+  async (req, res, next) => {
+    try {
+      const userId = req.authUser!.id;
+      const plan = await prisma.studyPlan.findFirst({
+        where: { id: String(req.params.id), userId },
+      });
+
+      if (!plan) return next(notFound('study plan not found'));
+
+      const blocks = normaliseStudyBlocks(plan.id, plan.blocks);
+      const nextBlocks = blocks.filter((block) => block.id !== String(req.params.blockId));
+      if (nextBlocks.length === blocks.length) return next(notFound('study block not found'));
+      if (nextBlocks.length === 0) {
+        return next(badRequest('a plan needs at least one block'));
+      }
+
+      await prisma.studyPlan.update({
+        where: { id: plan.id },
+        data: { blocks: nextBlocks },
+      });
+
+      res.status(204).end();
     } catch (error) {
       next(error);
     }
@@ -223,33 +485,6 @@ function foldLine(line: string): string {
     parts.push(` ${line.slice(index, index + 74)}`);
   }
   return parts.join('\r\n');
-}
-
-const DAY_INDEX: Record<PlanBlock['day'], number> = {
-  SUNDAY: 0,
-  MONDAY: 1,
-  TUESDAY: 2,
-  WEDNESDAY: 3,
-  THURSDAY: 4,
-  FRIDAY: 5,
-  SATURDAY: 6,
-};
-
-function nextOccurrence(day: PlanBlock['day'], startTime: string): Date {
-  const [hours, minutes] = startTime.split(':').map(Number);
-  const now = new Date();
-  const date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0, 0);
-  const delta = (DAY_INDEX[day] - date.getDay() + 7) % 7;
-  date.setDate(date.getDate() + delta);
-  return date;
-}
-
-function formatLocal(date: Date): string {
-  const pad = (value: number) => String(value).padStart(2, '0');
-  return (
-    `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}` +
-    `T${pad(date.getHours())}${pad(date.getMinutes())}00`
-  );
 }
 
 function formatUtc(date: Date): string {
@@ -274,9 +509,8 @@ studyPlansRouter.get(
         return next(badRequest('approve the plan before exporting it'));
       }
 
-      // Stored as the array itself, so wrap it in the shape the schema validates.
-      const parsed = planSchema.safeParse({ blocks: plan.blocks });
-      if (!parsed.success) {
+      const blocks = normaliseStudyBlocks(plan.id, plan.blocks);
+      if (blocks.length === 0) {
         return next(badRequest('this plan is not in a valid format'));
       }
 
@@ -288,27 +522,34 @@ studyPlansRouter.get(
         'METHOD:PUBLISH',
         'X-WR-CALNAME:iskole study plan',
       ];
-
       const stamp = formatUtc(new Date());
+      const todayKey = johannesburgDateKey(new Date());
+      const weekStart = startOfWeekDateKey(todayKey);
 
-      parsed.data.blocks.forEach((block, index) => {
-        const startTime = block.startTime ?? '17:00';
-        const duration = block.durationMinutes ?? 60;
-        const start = nextOccurrence(block.day, startTime);
-        const end = new Date(start.getTime() + duration * 60 * 1000);
+      for (const block of blocks) {
+        const dayOffset = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'].indexOf(
+          block.day,
+        );
+        const dateKey = addDaysToDateKey(weekStart, dayOffset);
+        const start = johannesburgLocalToUtc(dateKey, block.startTime);
+        const end = new Date(start.getTime() + block.durationMinutes * 60_000);
 
         lines.push(
           'BEGIN:VEVENT',
-          foldLine(`UID:${plan.id}-${index}@iskole`),
+          foldLine(`UID:${plan.id}-${block.id}@iskole`),
           `DTSTAMP:${stamp}`,
-          `DTSTART:${formatLocal(start)}`,
-          `DTEND:${formatLocal(end)}`,
+          `DTSTART:${formatUtc(start)}`,
+          `DTEND:${formatUtc(end)}`,
           'RRULE:FREQ=WEEKLY;COUNT=12',
-          foldLine(`SUMMARY:${escapeIcs(`Study: ${block.task}`)}`),
-          foldLine(`DESCRIPTION:${escapeIcs('Weekly study block from your iskole plan.')}`),
+          foldLine(`SUMMARY:${escapeIcs(block.task)}`),
+          foldLine(
+            `DESCRIPTION:${escapeIcs(
+              `${block.moduleCode ? `${block.moduleCode}: ` : ''}${block.kind.toLowerCase().replaceAll('_', ' ')} block from your iskole plan.`,
+            )}`,
+          ),
           'END:VEVENT',
         );
-      });
+      }
 
       lines.push('END:VCALENDAR');
 

@@ -25,3 +25,32 @@ export const guardianConsentSchema = z
   .strict();
 
 export type GuardianConsentInput = z.infer<typeof guardianConsentSchema>;
+
+/**
+ * Learner-facing consent purposes. ESSENTIAL covers the account and the learning record;
+ * the other two are optional choices a learner can make and revoke independently.
+ *
+ * Every write carries the policy version that was shown at the time. The version is stored
+ * with the evidence, so a later policy change does not rewrite history.
+ */
+export const CONSENT_PURPOSES = ['ESSENTIAL', 'AI_STUDY_PLAN', 'TALENT_VISIBILITY'] as const;
+
+export type ConsentPurpose = (typeof CONSENT_PURPOSES)[number];
+
+export const CONSENT_POLICY_VERSION = '2026-10-23';
+
+export const CONSENT_PURPOSE_LABELS: Record<ConsentPurpose, string> = {
+  ESSENTIAL: 'Account and learning record',
+  AI_STUDY_PLAN: 'AI study-plan assistance',
+  TALENT_VISIBILITY: 'Talent visibility to companies',
+};
+
+export const ConsentUpdateSchema = z
+  .object({
+    purpose: z.enum(CONSENT_PURPOSES),
+    granted: z.boolean(),
+    policyVersion: z.string().trim().min(1).max(40).default(CONSENT_POLICY_VERSION),
+  })
+  .strict();
+
+export type ConsentUpdate = z.infer<typeof ConsentUpdateSchema>;

@@ -80,7 +80,7 @@ export function SignInForm() {
         <Link href="/reset-password" className="font-medium text-ink underline underline-offset-4">
           {dict.resetTitle}
         </Link>
-        <Link href="/signup" className="text-muted underline underline-offset-4">
+        <Link href="/signup" className="text-muted-foreground underline underline-offset-4">
           {dict.signUpPrompt}
         </Link>
       </div>

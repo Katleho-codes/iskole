@@ -75,7 +75,7 @@ export function ResetPasswordForm() {
     return (
       <div className="flex flex-col gap-4">
         <h1 className="font-title text-3xl text-ink-deep">{dict.signInTitle}</h1>
-        <p className="text-muted">{dict.verifySuccess}</p>
+        <p className="text-muted-foreground">{dict.verifySuccess}</p>
         <Link href="/signin" className="font-medium text-ink underline underline-offset-4">
           {dict.signIn}
         </Link>
@@ -113,7 +113,7 @@ export function ResetPasswordForm() {
     return (
       <div className="flex flex-col gap-4">
         <h1 className="font-title text-3xl text-ink-deep">{dict.resetDoneTitle}</h1>
-        <p className="text-muted">{dict.resetDoneBody}</p>
+        <p className="text-muted-foreground">{dict.resetDoneBody}</p>
         <Link href="/signin" className="font-medium text-ink underline underline-offset-4">
           {dict.signIn}
         </Link>
@@ -124,7 +124,7 @@ export function ResetPasswordForm() {
   return (
     <form onSubmit={onRequest} className="flex flex-col gap-5" noValidate>
       <h1 className="font-title text-3xl text-ink-deep">{dict.resetTitle}</h1>
-      <p className="text-muted">{dict.resetRequestBody}</p>
+      <p className="text-muted-foreground">{dict.resetRequestBody}</p>
       <Field id="email" label={dict.emailLabel}>
         <TextInput
           id="email"

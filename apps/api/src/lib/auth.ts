@@ -16,11 +16,9 @@
  * Design decisions recorded here so they are not re-litigated:
  * - Roles: the admin plugin owns the `role` column, `defaultRole: "STUDENT"`, and
  *   `additionalFields` is NOT used for role so the client can never set it.
- * - Email verification is TEMPORARILY OFF in this build (REQUIRE_EMAIL_VERIFICATION
- *   below), so the demo can sign in without a working mailbox. With it on, better-auth
- *   requires a verified address before sign-in and sign-up returns the same 200 whether
- *   or not the address already exists, which closes the enumeration gap opened while it
- *   is off. See SECURITY.md gap 8.
+ * - Email verification is ON. better-auth requires a verified address before a session is
+ *   issued, sign-up returns the same 200 whether or not the address already exists, and
+ *   the seeded demo account is pre-verified so judges are never blocked by a mailbox.
  * - Rate limiting is force-enabled in every environment, including development.
  * - Breached-password checking is on, except in the test environment where the
  *   network call would make tests flaky. It is on in dev and production.
@@ -42,10 +40,11 @@ const DEFAULT_ROLE = 'STUDENT';
  * unverified address as a reason to refuse a request: the better-auth config below and
  * `requireSession` in middleware/auth.ts both read it.
  *
- * TEMPORARY: false while the mail path is being finished. Flip to true to require a
- * verified address at sign-in and on every guarded route.
+ * This is deliberately a code constant, not an environment toggle: an env mistake must
+ * not be able to silently turn off a POPIA/account-security control. Tests read it rather
+ * than assuming a mode.
  */
-export const REQUIRE_EMAIL_VERIFICATION = false;
+export const REQUIRE_EMAIL_VERIFICATION = true;
 
 /** NIST 800-63B via the OWASP Authentication Cheat Sheet: length over forced complexity. */
 const MIN_PASSWORD_LENGTH = 12;
@@ -80,7 +79,7 @@ export const auth = betterAuth({
         text: `Someone asked to reset the password for your iskole account.\n\nIf it was you, open this link to choose a new password:\n${url}\n\nIf it was not you, you can ignore this email.`,
         userId: user.id,
         template: 'reset-password',
-      });
+      }).catch(() => undefined);
     },
 
     onPasswordReset: async ({ user }) => {
@@ -99,7 +98,7 @@ export const auth = betterAuth({
         text: 'Someone tried to create an iskole account with your email address.\n\nIf it was you, sign in instead, or reset your password if you have forgotten it.\nIf it was not you, you can ignore this email. No account was changed.',
         userId: user.id,
         template: 'duplicate-signup-notice',
-      });
+      }).catch(() => undefined);
       await recordSecurityEvent({
         type: 'AUTH_DUPLICATE_SIGNUP',
         userId: user.id,
@@ -109,14 +108,11 @@ export const auth = betterAuth({
   },
 
   emailVerification: {
-    // TEMPORARY: email verification is switched off while the mail path is being
-    // finished, so a new learner lands straight in the app after sign-up. Re-enable
-    // these and requireEmailVerification above once Mailpit or the transactional
-    // provider is confirmed working. The sendVerificationEmail handler is kept so
-    // re-enabling is a flag change, not a rewrite.
-    sendOnSignUp: false,
-    sendOnSignIn: false,
-    autoSignInAfterVerification: false,
+    // Send the link at sign-up, and again if an unverified learner tries to sign in.
+    sendOnSignUp: true,
+    sendOnSignIn: true,
+    // The verified learner gets a session immediately and lands on the onboarding step.
+    autoSignInAfterVerification: true,
     // One hour. Short enough that a leaked link has little value.
     expiresIn: 60 * 60,
     sendVerificationEmail: async ({ user, url }) => {
@@ -126,7 +122,7 @@ export const auth = betterAuth({
         text: `Welcome to iskole. Confirm your email address to finish setting up your account:\n\n${url}\n\nIf you did not create an iskole account, you can ignore this email.`,
         userId: user.id,
         template: 'verify-email',
-      });
+      }).catch(() => undefined);
     },
     afterEmailVerification: async (user) => {
       await recordSecurityEvent({

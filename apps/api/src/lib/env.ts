@@ -42,6 +42,12 @@ const schema = z.object({
   MAIL_PORT: z.coerce.number().int().min(1).max(65535).default(1025),
   MAIL_FROM: z.string().min(3).default('iskole@localhost.test'),
 
+  /** Demo-only endpoints (simulate-review). Never true in real production configs. */
+  DEMO_MODE: z
+    .enum(['true', 'false'])
+    .default(process.env.NODE_ENV === 'production' ? 'false' : 'true')
+    .transform((value) => value === 'true'),
+
   /**
    * AI. Server side only. The key is optional so the app boots without it and degrades to
    * the deterministic result, which is the agreed failure behaviour: a missing key must

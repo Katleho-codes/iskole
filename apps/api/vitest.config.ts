@@ -21,6 +21,7 @@ export default defineConfig({
       MAIL_HOST: 'localhost',
       MAIL_PORT: '1025',
       MAIL_FROM: 'iskole@localhost.test',
+      DEMO_MODE: 'true',
       // A fake key so the AI client is "configured" in tests. The transport seam is what
       // actually prevents network calls, so a real key would still never be used. The
       // no-key degradation path is tested separately by clearing it before import.

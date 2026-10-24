@@ -5,10 +5,11 @@
  * Security notes:
  * - The client never sends a role. better-auth assigns the admin plugin's defaultRole
  *   (STUDENT) server-side. If a role were sent it would be ignored, but we do not send one.
- * - Email verification is currently switched off server-side (see lib/auth.ts), so a new
- *   learner gets a session immediately and goes straight into the app. When verification is
- *   re-enabled, sign-up returns the same success response whether or not the address already
- *   exists, so this screen cannot be used to find out who has an iskole account.
+ * - Email verification is on server-side (see lib/auth.ts), so sign-up never returns a
+ *   session. The learner sees a neutral "check your email" state, and the verification link
+ *   signs them in and sends them to profile onboarding.
+ * - Sign-up returns the same success response whether or not the address already exists, so
+ *   this screen cannot be used to find out who has an iskole account.
  * - Error messages shown to the user are generic on purpose.
  */
 'use client';
@@ -38,6 +39,7 @@ export function SignUpForm() {
   const [consent, setConsent] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -63,9 +65,9 @@ export function SignUpForm() {
       name,
       email,
       password,
-      // Where better-auth sends the learner if email verification is later re-enabled.
-      // Without this they would land on the raw JSON of its verify endpoint.
-      callbackURL: `${window.location.origin}/verify-email`,
+      // The verification link signs the learner in and sends them to the one onboarding
+      // field we could not persist before the account existed: date of birth.
+      callbackURL: `${window.location.origin}/profile?onboarding=1`,
       // Explicitly no role, no approved flag, nothing the client could use to escalate.
     });
 
@@ -77,18 +79,30 @@ export function SignUpForm() {
       return;
     }
 
-    // Capture the date of birth on the profile before the dashboard. The API re-checks the
-    // age; this call cannot set a role, and a failure just sends the learner to the profile
-    // screen so the missing field is obvious rather than silently absent.
-    const profileSaved = await fetch('/api/profile', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ dateOfBirth }),
-    }).catch(() => null);
+    // No session exists until the address is verified, so there is nothing to write yet.
+    // The DOB is collected again on /profile?onboarding=1 after verification; the API's
+    // age gate still refuses applications and company visibility without it.
+    setPending(false);
+    setSubmitted(true);
+  }
 
-    // Hard navigation so server components read the fresh session cookie on first request.
-    // better-auth signs the learner in as part of sign-up while verification is off.
-    window.location.assign(profileSaved?.ok ? '/dashboard' : '/profile');
+  if (submitted) {
+    return (
+      <div className="flex flex-col gap-4" role="status">
+        <h1 className="font-title text-3xl text-ink-deep">Check your email</h1>
+        <p className="text-sm leading-6 text-muted-foreground">
+          We sent a verification link to <span className="font-medium text-text">{email}</span>.
+          Open it to finish creating your account. The link expires in one hour.
+        </p>
+        <p className="text-sm leading-6 text-muted-foreground">
+          Nothing in your inbox? Check your spam folder, then{' '}
+          <Link href="/signup" className="font-medium text-ink underline underline-offset-4">
+            try signing up again
+          </Link>
+          .
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -148,7 +162,7 @@ export function SignUpForm() {
         />
       </Field>
 
-      <label className="flex items-start gap-3 text-sm text-muted">
+      <label className="flex items-start gap-3 text-sm text-muted-foreground">
         <input
           type="checkbox"
           name="consent"

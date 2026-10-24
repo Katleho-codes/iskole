@@ -145,7 +145,7 @@ describe('clinic', () => {
       .post('/api/clinic/bookings')
       .set('Cookie', learner.cookie ?? '')
       .set('Idempotency-Key', idempotencyKey)
-      .send({ slotId: slot.id });
+      .send({ slotId: slot.id, reason: 'FUNDING' });
 
     expect(first.status).toBe(201);
     expect(first.body.booking.slot.id).toBe(slot.id);
@@ -155,7 +155,7 @@ describe('clinic', () => {
       .post('/api/clinic/bookings')
       .set('Cookie', learner.cookie ?? '')
       .set('Idempotency-Key', idempotencyKey)
-      .send({ slotId: slot.id });
+      .send({ slotId: slot.id, reason: 'FUNDING' });
     expect(replay.status).toBe(201);
     expect(replay.body.booking.id).toBe(first.body.booking.id);
     expect(await prisma.booking.count({ where: { slotId: slot.id } })).toBe(1);
@@ -165,7 +165,7 @@ describe('clinic', () => {
       .post('/api/clinic/bookings')
       .set('Cookie', learner.cookie ?? '')
       .set('Idempotency-Key', key('booking'))
-      .send({ slotId: slot.id });
+      .send({ slotId: slot.id, reason: 'FUNDING' });
     expect(duplicate.status).toBe(409);
 
     // Another learner: the slot is full.
@@ -173,7 +173,7 @@ describe('clinic', () => {
       .post('/api/clinic/bookings')
       .set('Cookie', other.cookie ?? '')
       .set('Idempotency-Key', key('booking'))
-      .send({ slotId: slot.id });
+      .send({ slotId: slot.id, reason: 'FUNDING' });
     expect(full.status).toBe(409);
   });
 
@@ -185,7 +185,7 @@ describe('clinic', () => {
       .post('/api/clinic/bookings')
       .set('Cookie', learner.cookie ?? '')
       .set('Idempotency-Key', key('booking-past'))
-      .send({ slotId: slot.id });
+      .send({ slotId: slot.id, reason: 'FUNDING' });
 
     expect(res.status).toBe(422);
   });

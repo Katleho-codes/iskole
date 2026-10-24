@@ -12,7 +12,7 @@
  */
 import { Router } from 'express';
 import { z } from 'zod';
-import { guardianConsentSchema } from '@iskole/shared';
+import { guardianConsentSchema, ConsentUpdateSchema } from '@iskole/shared';
 import { requireRole, requireSession } from '../middleware/auth';
 import { prisma } from '../lib/prisma';
 import { badRequest, unprocessable } from '../lib/http-error';
@@ -156,12 +156,118 @@ privacyRouter.put(
   },
 );
 
+privacyRouter.get('/privacy/consents', requireSession, requireRole('STUDENT'), async (req, res, next) => {
+  try {
+    const userId = req.authUser!.id;
+    const consents = await prisma.consent.findMany({
+      where: { userId },
+      orderBy: [{ grantedAt: 'desc' }, { id: 'desc' }],
+      select: {
+        id: true,
+        purpose: true,
+        policyVersion: true,
+        grantedAt: true,
+        revokedAt: true,
+      },
+    });
+
+    res.json({
+      consents,
+      active: consents.filter((consent) => consent.revokedAt === null),
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+privacyRouter.post('/privacy/consents', requireSession, requireRole('STUDENT'), async (req, res, next) => {
+  try {
+    const userId = req.authUser!.id;
+    const parsed = ConsentUpdateSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return next(badRequest('send { "purpose": "...", "granted": true|false }'));
+    }
+
+    const { purpose, granted, policyVersion } = parsed.data;
+
+    if (granted) {
+      const active = await prisma.consent.findFirst({
+        where: { userId, purpose, revokedAt: null },
+        orderBy: { grantedAt: 'desc' },
+      });
+
+      // Repeating the same grant is not new evidence. A new policy version replaces the
+      // active record, but the old row is closed rather than overwritten.
+      if (active && active.policyVersion === policyVersion) {
+        return res.json({ consent: active, active: true });
+      }
+
+      const consent = await prisma.$transaction(async (tx) => {
+        if (active) {
+          await tx.consent.update({
+            where: { id: active.id },
+            data: { revokedAt: new Date() },
+          });
+        }
+        return tx.consent.create({
+          data: { userId, purpose, policyVersion },
+          select: {
+            id: true,
+            purpose: true,
+            policyVersion: true,
+            grantedAt: true,
+            revokedAt: true,
+          },
+        });
+      });
+
+      await recordSecurityEvent({
+        type: 'CONSENT_UPDATED',
+        userId,
+        route: 'POST /privacy/consents',
+        detail: `${purpose} granted ${policyVersion}`,
+      });
+
+      return res.status(201).json({ consent, active: true });
+    }
+
+    const revoked = await prisma.consent.updateMany({
+      where: { userId, purpose, revokedAt: null },
+      data: { revokedAt: new Date() },
+    });
+
+    await recordSecurityEvent({
+      type: 'CONSENT_UPDATED',
+      userId,
+      route: 'POST /privacy/consents',
+      detail: `${purpose} revoked`,
+    });
+
+    res.json({ revoked: revoked.count, active: false });
+  } catch (error) {
+    next(error);
+  }
+});
+
 privacyRouter.get('/privacy/export', requireSession, requireRole('STUDENT'), async (req, res, next) => {
   try {
     const userId = req.authUser!.id;
 
-    const [user, profile, preferences, marks, applications, expenses, budgets, studyPlans, bookings, messages, guardianConsent] =
-      await Promise.all([
+    const [
+      user,
+      profile,
+      preferences,
+      marks,
+      applications,
+      expenses,
+      budgets,
+      moneyPlan,
+      studyPlans,
+      bookings,
+      messages,
+      guardianConsent,
+      consents,
+    ] = await Promise.all([
       prisma.user.findUnique({
         where: { id: userId },
         select: {
@@ -193,11 +299,15 @@ privacyRouter.get('/privacy/export', requireSession, requireRole('STUDENT'), asy
       }),
       prisma.expense.findMany({
         where: { userId },
-        select: { category: true, amountCents: true, description: true, spentAt: true },
+        select: { category: true, amountCents: true, description: true, remindMe: true, spentAt: true },
       }),
       prisma.budget.findMany({
         where: { userId },
         select: { category: true, amountCents: true, period: true },
+      }),
+      prisma.moneyPlan.findUnique({
+        where: { userId },
+        select: { paydayDay: true },
       }),
       prisma.studyPlan.findMany({
         where: { userId },
@@ -207,6 +317,7 @@ privacyRouter.get('/privacy/export', requireSession, requireRole('STUDENT'), asy
         where: { userId },
         select: {
           status: true,
+          reason: true,
           createdAt: true,
           slot: { select: { topic: true, startsAt: true, endsAt: true } },
         },
@@ -218,6 +329,11 @@ privacyRouter.get('/privacy/export', requireSession, requireRole('STUDENT'), asy
       prisma.guardianConsent.findUnique({
         where: { userId },
         select: { guardianName: true, guardianContact: true, confirmedAt: true },
+      }),
+      prisma.consent.findMany({
+        where: { userId },
+        orderBy: { grantedAt: 'asc' },
+        select: { purpose: true, policyVersion: true, grantedAt: true, revokedAt: true },
       }),
     ]);
 
@@ -267,10 +383,12 @@ privacyRouter.get('/privacy/export', requireSession, requireRole('STUDENT'), asy
         amount: budget.amountCents / 100,
         amountCents: undefined,
       })),
+      moneyPlan,
       studyPlans,
       bookings,
       messages,
       guardianConsent,
+      consents,
     };
 
     res.setHeader('Content-Type', 'application/json; charset=utf-8');

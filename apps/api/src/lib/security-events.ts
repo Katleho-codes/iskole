@@ -25,6 +25,7 @@ export type SecurityEventType =
   | 'TALENT_VISIBILITY_CHANGED'
   | 'MODERATOR_ACTION'
   | 'GUARDIAN_CONSENT_RECORDED'
+  | 'CONSENT_UPDATED'
   | 'DOCUMENT_ACCESS_DENIED';
 
 export type SecurityEventInput = {

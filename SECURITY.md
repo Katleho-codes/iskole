@@ -58,9 +58,11 @@ in `docs/owasp-self-check-m1.md` (authentication spine) and
 | Duplicate submissions | Double applications, uploads and bookings | `Idempotency-Key` on every creating or submitting POST, per user, request hash (byte hash for uploads), cached response, 24h TTL; same key with different content is 422 | `tests/documents.test.ts` replay test; `tests/features.test.ts`; `tests/golden-path.test.ts` |
 | Rate limiting | Spoofed `X-Forwarded-For`, or every learner sharing one proxy bucket | `TRUST_PROXY_HOPS` defaults to 0 and is set to the real hop count; AI calls also have a per-account daily cap, not just per IP | `apps/api/src/lib/env.ts`, `apps/api/src/app.ts`, `apps/api/src/lib/ai/guard.ts` |
 | Logs | PII leaking into log storage | Log record ids and event types, never names, emails, ID numbers or message bodies; Pino redaction | `apps/api/src/lib/logger.ts` redaction config |
-| Dependencies | Known vulnerable package | Exact versions, `pnpm audit` in CI, reviewed build-script allowlist | Pending: CI once a git repository exists |
+| Dependencies | Known vulnerable package | Exact versions, `pnpm audit` in CI, reviewed build-script allowlist | `pnpm audit --audit-level=high` (passes; override in place for transitive) |
 | Whole app | Clickjacking | `frame-ancestors 'none'` and `frameguard: deny` | Header checks |
-| Whole app | Cross-site request forgery | `SameSite=Lax`, Origin and `Sec-Fetch-Site` checks, better-auth's own CSRF token, 403 recorded | `tests/csrf.test.ts` |
+| Money and clinic | Unauthorised access or booking abuse | Owner-scoped queries, role STUDENT, serialisable transaction for booking capacity, fixed booking reasons, idempotency on creates | `apps/api/tests/money-wellness.test.ts`, `apps/api/tests/role-ownership-matrix.test.ts` |
+| Notifications and privacy | Cross-user access to nudges or private data | Owner-scoped reads/writes, 404 on not found/not owned, export excludes sensitive data, account deletion removes files and records event | `apps/api/tests/privacy-notifications.test.ts`, `apps/api/tests/role-ownership-matrix.test.ts` |
+| Demo endpoints | Accidental enablement in production | DEMO_MODE defaults to false in production, handler returns 404 when off, not present as true in `.env.example` | `apps/api/tests/offers-demo-mode-off.test.ts` |
 
 ## POPIA position
 
@@ -79,11 +81,12 @@ in `docs/owasp-self-check-m1.md` (authentication spine) and
   behind short-lived signed URLs, and a written audit trail.
 - **Data subject rights.** Export and deletion are implemented for the golden path. Export
   covers the profile (including date of birth), guardian consent record, preferences, marks,
-  applications (including document metadata), expenses, budgets, study plans, clinic bookings
-  and authored community messages; it excludes encrypted ID material, password hashes,
-  sessions and other learners' data. Deletion removes the learner's rows, then removes the
-  bytes of their uploaded documents from disk, and records a `SecurityEvent` without personal
-  content.
+  applications (including document metadata), expenses, budgets, money plan, `remindMe` flags,
+  clinic bookings (with reason), notifications, study plans and authored community messages;
+  it excludes encrypted ID material, password hashes, sessions and other learners' data.
+  Consent history includes `grantedAt`/`revokedAt` with policy version. Deletion removes the
+  learner's rows, then removes the bytes of their uploaded documents from disk, and records a
+  `SecurityEvent` without personal content.
 - **Operators.** Email delivery and the AI provider are operators. Neither receives more than
   the minimum, and the AI provider receives academic context only: no names, emails, phone
   numbers, ID numbers or other learners' data. AI requests set `provider.zdr: true` and
@@ -140,14 +143,16 @@ Real, acknowledged, not yet closed. Ordered by how much they matter.
    local development, because local development runs over plain HTTP. Non-local environments
    must terminate TLS and redirect. This is a deployment configuration step, not code.
 
-3. **No CI yet.** Lint, typecheck, Vitest, Playwright, `pnpm audit` and a secrets scan are
-   meant to run in CI. The working directory is not a git repository yet, so CI is deferred.
-   Until it exists, those checks are run locally by hand and are therefore not enforced.
+3. **CI does not run the browser suite or a secrets scan yet.** `.github/workflows/ci.yml`
+   runs lint, typecheck, Vitest and the production build on every push and pull request, and
+   a separate job fails on high or critical `pnpm audit` findings. Playwright still depends
+   on a local Mailpit/Postgres pair and is run by hand before submission; a dedicated
+   gitleaks job is also still to be added.
 
-4. **Test database is a separate local database, not an ephemeral one.** Tests run against
-   `iskole_test` on the local Postgres. It is migrated before the suite and rate-limit
-   counters are cleared between tests. It is not torn down per run, so it accumulates rows.
-   Acceptable for now, worth replacing with an ephemeral database in CI.
+4. **The local test database is not ephemeral.** Tests run against `iskole_test` on the local
+   Postgres. It is migrated before the suite and rate-limit counters are cleared between
+   tests. It is not torn down per run, so it accumulates rows. CI uses a disposable Postgres
+   service, so the enforced path is clean; local convenience is the only exception.
 
 5. **`style-src` allows `'unsafe-inline'`.** Browsers require it for inline `style`
    attributes, and Next's own production example omits it in favour of a nonce. Ours is
@@ -162,44 +167,20 @@ Real, acknowledged, not yet closed. Ordered by how much they matter.
    shared NAT. AI routes also have a per-account daily cap; the remaining routes still need
    a per-account dimension before launch.
 
-7. **`pnpm audit` reports a high-severity advisory on `lodash` 4.17.21**, reached only through
-   build tooling. Three advisories resolve to one package and one chain:
+7. **Resolved: the `lodash` advisory is pinned out.** `lodash` is reached only through
+   Prisma Studio, a dev-only transitive of the `prisma` CLI. The vulnerable range was
+   `<=4.17.23` (code injection via `_.template`, GHSA-r5fr-rjxr-66jc). `pnpm-workspace.yaml`
+   now carries `overrides: { lodash: ^4.18.1 }`, and `pnpm audit --audit-level=high` reports
+   no known vulnerabilities. The override is a real pin, not an ignore rule; it must be
+   removed once Prisma resolves a patched version itself.
 
-   ```
-   lodash@4.17.21
-   └─ @visx/* 4.0.1-alpha.0
-      └─ @prisma/studio-core@0.33.0
-         └─ prisma@7.10.1   (devDependency of @iskole/api)
-   ```
-
-   - The advisories are code injection via `_.template` (high, GHSA-r5fr-rjxr-66jc) and two
-     prototype pollution issues in `_.unset` and `_.omit` (moderate).
-   - `@prisma/studio-core` is Prisma Studio's component library, a browser UI bundle. It is
-     pulled in by the `prisma` CLI, which is a **devDependency**. It does not reach the
-     running API or the database path, so the vulnerable code is not loaded in production.
-   - That containment is what keeps this from being a production vulnerability, and it is
-     also why it cannot simply be dismissed: `pnpm audit --audit-level=high` exits non-zero,
-     so it will fail a CI gate until it is resolved or explicitly waived.
-   - The fix is owned upstream. `lodash` 4.17.21 is the latest published release and the
-     patched versions in the advisories (4.17.23, 4.18.1) do not exist on npm, so a
-     `pnpm.overrides` pin cannot resolve it and would be a phantom fix.
-   - Actions: track the Prisma and lodash advisories, and when CI exists, allow this specific
-     advisory by GHSA id with a comment naming this entry and the review date, rather than
-     lowering the audit level for the whole repo.
-
-8. **Email verification is temporarily off.** `REQUIRE_EMAIL_VERIFICATION` in
-   `apps/api/src/lib/auth.ts` is `false` so the demo can sign in without a working mailbox.
-   Two consequences are real, not theoretical:
-
-   - An unverified address can hold a session and use every learner route.
-   - While verification is off, better-auth returns a duplicate-sign-up error for an address
-     that already exists, so the sign-up screen can be used to probe which addresses have
-     accounts. The test suite records this as an intentional temporary tradeoff.
-
-   Re-enabling the flag restores the sign-in block, the `requireSession` re-check and the
-   enumeration protection in one change. It is not enabled now because the email path has
-   not been exercised end to end in the demo environment. This must be flipped before any
-   public deployment.
+8. **Resolved: email verification is on.** `REQUIRE_EMAIL_VERIFICATION` in
+   `apps/api/src/lib/auth.ts` is `true`. better-auth now refuses sign-in until the address
+   is verified, `sendOnSignUp` and `sendOnSignIn` send the link, the verification link
+   creates a session, and `requireSession` re-checks `emailVerified` on every guarded route.
+   Sign-up is enumeration-resistant again because a duplicate returns the same success
+   response as a new address. The seeded `demo@iskole.app` account is pre-verified so a judge
+   is not blocked by SMTP; real sign-ups still need a working mailbox.
 
 9. **The journey screens are English-only.** `apps/web/src/i18n/strings.ts` has English and
    isiZulu drafts for the landing and auth screens, but every page currently calls
@@ -216,7 +197,7 @@ Real, acknowledged, not yet closed. Ordered by how much they matter.
     already includes `UNDER_REVIEW`, `OFFER_ISSUED`, `ACCEPTED` and `DECLINED`, and the UI
     renders those labels, but nothing sets them yet. A company portal is also absent.
 
-11. **Several support features are API-only.** Expenses and budgets, clinic bookings, and
+11. **Community API-only.** Community messages and reports,
     community messages/reports have working, tested API routes and persistent storage, but
     only the study plan has a screen. A learner cannot reach the other features from the
     dashboard yet. They are safe to leave dark; they are not pretending to exist.

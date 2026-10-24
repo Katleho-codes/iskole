@@ -36,7 +36,7 @@ export function Field({ id, label, hint, error, children }: FieldProps) {
         {label}
       </label>
       {hint ? (
-        <p id={`${id}-hint`} className="text-sm text-muted">
+        <p id={`${id}-hint`} className="text-sm text-muted-foreground">
           {hint}
         </p>
       ) : null}
@@ -62,7 +62,7 @@ export function TextInput({ id, invalid, className, ...rest }: TextInputProps) {
       aria-invalid={invalid || undefined}
       className={[
         'min-h-11 w-full rounded-lg border bg-paper-raised px-3 py-2 text-base text-text',
-        'placeholder:text-muted/70',
+        'placeholder:text-muted-foreground/70',
         invalid ? 'border-danger' : 'border-line',
         className ?? '',
       ].join(' ')}
