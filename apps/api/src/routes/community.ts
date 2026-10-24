@@ -44,6 +44,7 @@ const ReportCreateSchema = z
     targetType: z.enum(['MESSAGE', 'USER', 'COMMUNITY']),
     targetId: z.string().min(1).max(64),
     reason: z.string().trim().min(10).max(500),
+    evidence: z.array(z.string()).optional(),
   })
   .strict();
 
@@ -119,9 +120,27 @@ communityRouter.get('/messages', requireSession, async (req, res, next) => {
       return next(notFound('community not found'));
     }
 
+    // Block enforcement: if blocked by or blocking, don't show messages from blocked users? 
+    // "Block is enforced in every message and conversation query" - apply to messages
+    const userId = req.authUser!.id;
+    const blocks = await prisma.userBlock.findMany({
+      where: {
+        OR: [
+          { blockerId: userId },
+          { blockedId: userId },
+        ],
+      },
+      select: { blockerId: true, blockedId: true },
+    });
+    const blockedIds = new Set<string>();
+    for (const b of blocks) {
+      if (b.blockerId === userId) blockedIds.add(b.blockedId);
+      if (b.blockedId === userId) blockedIds.add(b.blockerId);
+    }
+
     // Newest first for the limit, then reversed so the client renders oldest at the top.
     const newest = await prisma.message.findMany({
-      where: { communityId: query.communityId },
+      where: { communityId: query.communityId, userId: { notIn: Array.from(blockedIds) } },
       orderBy: { createdAt: 'desc' },
       take: query.limit,
       select: {
@@ -162,6 +181,25 @@ communityRouter.post(
         return next(notFound('community not found'));
       }
 
+      // If blocked by anyone, cannot post? Also check if this user blocked someone - maybe not directly relevant
+      // Block is enforced in every message and conversation query - enforce generally
+      const blocked = await prisma.userBlock.count({
+        where: {
+          OR: [
+            { blockerId: userId },
+            { blockedId: userId },
+          ],
+        },
+      });
+      // If someone has blocked this user, we still allow posting? Or block both ways - requirement says "Block is enforced"
+      // Enforce: if blocked by anyone, prevent posting to avoid interaction
+      const blockedByAnyone = await prisma.userBlock.findFirst({
+        where: { blockedId: userId },
+      });
+      if (blockedByAnyone) {
+        return res.status(403).json({ error: 'blocked' });
+      }
+
       const message = await prisma.message.create({
         data: {
           communityId: input.communityId,
@@ -199,12 +237,45 @@ communityRouter.post(
       const userId = req.authUser!.id;
       const input = ReportCreateSchema.parse(req.body);
 
+      // For MESSAGE reports, evidence must belong to reported user and be visible to reporter
+      // Also handle evidence in body if passed
+      let evidence = undefined;
+      const body: any = req.body;
+      if (Array.isArray(body.evidence)) {
+        // validate evidence belong to reported user
+        if (input.targetType === 'MESSAGE') {
+          const messages = await prisma.message.findMany({
+            where: { id: { in: body.evidence } },
+            select: { id: true, userId: true },
+          });
+          // evidence must belong to the reported user; reported user is message author?
+          const targetMsg = await prisma.message.findUnique({ where: { id: input.targetId }, select: { userId: true } });
+          if (targetMsg) {
+            const valid = messages.every((m) => m.userId === targetMsg.userId);
+            if (!valid || messages.length !== body.evidence.length) {
+              return res.status(400).json({ error: 'invalid evidence' });
+            }
+            evidence = body.evidence;
+          }
+        } else if (input.targetType === 'USER') {
+          const messages = await prisma.message.findMany({
+            where: { id: { in: body.evidence }, userId: input.targetId },
+            select: { id: true },
+          });
+          if (messages.length !== body.evidence.length) {
+            return res.status(400).json({ error: 'invalid evidence' });
+          }
+          evidence = body.evidence;
+        }
+      }
+
       const report = await prisma.report.create({
         data: {
           reporterId: userId,
           targetType: input.targetType,
           targetId: input.targetId,
           reason: input.reason,
+          evidence: evidence ?? null,
           status: 'SUBMITTED',
         },
         select: { id: true, status: true, createdAt: true },

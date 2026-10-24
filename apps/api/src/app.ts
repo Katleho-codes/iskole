@@ -31,6 +31,9 @@ import { matchRouter } from './routes/match';
 import { privacyRouter } from './routes/privacy';
 import { profileRouter } from './routes/profile';
 import { studyPlansRouter } from './routes/study-plans';
+import { blocksRouter } from './routes/blocks';
+import { conversationsRouter } from './routes/conversations';
+import moderationRouter from './routes/moderation';
 
 export function createApp() {
   const app = express();
@@ -66,6 +69,9 @@ export function createApp() {
   app.use('/api', communityRouter);
   app.use('/api', companiesRouter);
   app.use('/api', matchRouter);
+  app.use('/api', blocksRouter);
+  app.use('/api', conversationsRouter);
+  app.use('/api', moderationRouter);
 
   app.use(errorHandler);
   return app;
