@@ -43,6 +43,12 @@ model User {
   bookings      Booking[]
   messages      Message[]
   reports       Report[]
+  blockedUsers  UserBlock[]     @relation("BlockedUser")
+  blockingUsers UserBlock[]     @relation("BlockingUser")
+  mutedCommunities CommunityMute[]
+  conversationsAsInitiator Conversation[] @relation("ConversationInitiator")
+  conversationsAsRecipient Conversation[] @relation("ConversationRecipient")
+  directMessages DirectMessage[]
 
   @@unique([email])
   @@map("user")
@@ -447,13 +453,14 @@ model Booking {
 }
 
 model Community {
-  id          String    @id @default(cuid())
-  name        String    @unique
+  id          String         @id @default(cuid())
+  name        String         @unique
   field       String?
   description String?
   createdById String?
-  createdAt   DateTime  @default(now())
+  createdAt   DateTime       @default(now())
   messages    Message[]
+  mutedUsers  CommunityMute[]
 
   @@map("community")
 }
@@ -472,17 +479,77 @@ model Message {
   @@map("message")
 }
 
+model UserBlock {
+  id         String   @id @default(cuid())
+  blockerId  String
+  blocker    User     @relation("BlockingUser", fields: [blockerId], references: [id], onDelete: Cascade)
+  blockedId  String
+  blocked    User     @relation("BlockedUser", fields: [blockedId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([blockerId, blockedId])
+  @@index([blockedId])
+  @@map("userBlock")
+}
+
+model CommunityMute {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  communityId String
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  mutedUntil  DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@unique([userId, communityId])
+  @@index([communityId])
+  @@map("communityMute")
+}
+
+model Conversation {
+  id          String   @id @default(cuid())
+  initiatorId String
+  initiator   User     @relation("ConversationInitiator", fields: [initiatorId], references: [id], onDelete: Cascade)
+  recipientId String
+  recipient   User     @relation("ConversationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  messages    DirectMessage[]
+
+  @@unique([initiatorId, recipientId])
+  @@index([recipientId])
+  @@map("conversation")
+}
+
+model DirectMessage {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  body           String
+  createdAt      DateTime     @default(now())
+  readAt         DateTime?
+
+  @@index([conversationId, createdAt])
+  @@map("directMessage")
+}
+
 /// A learner's report of a message, user or community. Stores no copy of the reported
 /// content: the moderator reads the original record, and the report itself stays small.
 model Report {
-  id         String   @id @default(cuid())
-  reporterId String
-  reporter   User     @relation(fields: [reporterId], references: [id], onDelete: Cascade)
-  targetType String
-  targetId   String
-  reason     String
-  status     String   @default("SUBMITTED")
-  createdAt  DateTime @default(now())
+  id           String   @id @default(cuid())
+  reporterId   String
+  reporter     User     @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  targetType   String
+  targetId     String
+  reason       String
+  evidence     Json?
+  resolution   String?
+  resolvedById String?
+  resolvedAt   DateTime?
+  status       String   @default("SUBMITTED")
+  createdAt    DateTime @default(now())
 
   @@index([status, createdAt])
   @@map("report")
