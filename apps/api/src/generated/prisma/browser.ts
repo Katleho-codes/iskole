@@ -191,3 +191,23 @@ export type DirectMessage = Prisma.DirectMessageModel
  * content: the moderator reads the original record, and the report itself stays small.
  */
 export type Report = Prisma.ReportModel
+/**
+ * Model SavedFunding
+ * 
+ */
+export type SavedFunding = Prisma.SavedFundingModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model MoneyPlan
+ * 
+ */
+export type MoneyPlan = Prisma.MoneyPlanModel
+/**
+ * Model Consent
+ * 
+ */
+export type Consent = Prisma.ConsentModel

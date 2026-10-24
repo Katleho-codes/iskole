@@ -42,6 +42,7 @@ export type ExpenseMinAggregateOutputType = {
   category: string | null
   amountCents: number | null
   description: string | null
+  remindMe: boolean | null
   spentAt: Date | null
   createdAt: Date | null
 }
@@ -52,6 +53,7 @@ export type ExpenseMaxAggregateOutputType = {
   category: string | null
   amountCents: number | null
   description: string | null
+  remindMe: boolean | null
   spentAt: Date | null
   createdAt: Date | null
 }
@@ -62,6 +64,7 @@ export type ExpenseCountAggregateOutputType = {
   category: number
   amountCents: number
   description: number
+  remindMe: number
   spentAt: number
   createdAt: number
   _all: number
@@ -82,6 +85,7 @@ export type ExpenseMinAggregateInputType = {
   category?: true
   amountCents?: true
   description?: true
+  remindMe?: true
   spentAt?: true
   createdAt?: true
 }
@@ -92,6 +96,7 @@ export type ExpenseMaxAggregateInputType = {
   category?: true
   amountCents?: true
   description?: true
+  remindMe?: true
   spentAt?: true
   createdAt?: true
 }
@@ -102,6 +107,7 @@ export type ExpenseCountAggregateInputType = {
   category?: true
   amountCents?: true
   description?: true
+  remindMe?: true
   spentAt?: true
   createdAt?: true
   _all?: true
@@ -199,6 +205,7 @@ export type ExpenseGroupByOutputType = {
   category: string
   amountCents: number
   description: string | null
+  remindMe: boolean
   spentAt: Date
   createdAt: Date
   _count: ExpenseCountAggregateOutputType | null
@@ -232,6 +239,7 @@ export type ExpenseWhereInput = {
   category?: Prisma.StringFilter<"Expense"> | string
   amountCents?: Prisma.IntFilter<"Expense"> | number
   description?: Prisma.StringNullableFilter<"Expense"> | string | null
+  remindMe?: Prisma.BoolFilter<"Expense"> | boolean
   spentAt?: Prisma.DateTimeFilter<"Expense"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Expense"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -243,6 +251,7 @@ export type ExpenseOrderByWithRelationInput = {
   category?: Prisma.SortOrder
   amountCents?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  remindMe?: Prisma.SortOrder
   spentAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -257,6 +266,7 @@ export type ExpenseWhereUniqueInput = Prisma.AtLeast<{
   category?: Prisma.StringFilter<"Expense"> | string
   amountCents?: Prisma.IntFilter<"Expense"> | number
   description?: Prisma.StringNullableFilter<"Expense"> | string | null
+  remindMe?: Prisma.BoolFilter<"Expense"> | boolean
   spentAt?: Prisma.DateTimeFilter<"Expense"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Expense"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -268,6 +278,7 @@ export type ExpenseOrderByWithAggregationInput = {
   category?: Prisma.SortOrder
   amountCents?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  remindMe?: Prisma.SortOrder
   spentAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ExpenseCountOrderByAggregateInput
@@ -286,6 +297,7 @@ export type ExpenseScalarWhereWithAggregatesInput = {
   category?: Prisma.StringWithAggregatesFilter<"Expense"> | string
   amountCents?: Prisma.IntWithAggregatesFilter<"Expense"> | number
   description?: Prisma.StringNullableWithAggregatesFilter<"Expense"> | string | null
+  remindMe?: Prisma.BoolWithAggregatesFilter<"Expense"> | boolean
   spentAt?: Prisma.DateTimeWithAggregatesFilter<"Expense"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Expense"> | Date | string
 }
@@ -295,6 +307,7 @@ export type ExpenseCreateInput = {
   category: string
   amountCents: number
   description?: string | null
+  remindMe?: boolean
   spentAt?: Date | string
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutExpensesInput
@@ -306,6 +319,7 @@ export type ExpenseUncheckedCreateInput = {
   category: string
   amountCents: number
   description?: string | null
+  remindMe?: boolean
   spentAt?: Date | string
   createdAt?: Date | string
 }
@@ -315,6 +329,7 @@ export type ExpenseUpdateInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remindMe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   spentAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutExpensesNestedInput
@@ -326,6 +341,7 @@ export type ExpenseUncheckedUpdateInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remindMe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   spentAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -336,6 +352,7 @@ export type ExpenseCreateManyInput = {
   category: string
   amountCents: number
   description?: string | null
+  remindMe?: boolean
   spentAt?: Date | string
   createdAt?: Date | string
 }
@@ -345,6 +362,7 @@ export type ExpenseUpdateManyMutationInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remindMe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   spentAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -355,6 +373,7 @@ export type ExpenseUncheckedUpdateManyInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remindMe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   spentAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -375,6 +394,7 @@ export type ExpenseCountOrderByAggregateInput = {
   category?: Prisma.SortOrder
   amountCents?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  remindMe?: Prisma.SortOrder
   spentAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -389,6 +409,7 @@ export type ExpenseMaxOrderByAggregateInput = {
   category?: Prisma.SortOrder
   amountCents?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  remindMe?: Prisma.SortOrder
   spentAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -399,6 +420,7 @@ export type ExpenseMinOrderByAggregateInput = {
   category?: Prisma.SortOrder
   amountCents?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  remindMe?: Prisma.SortOrder
   spentAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -454,6 +476,7 @@ export type ExpenseCreateWithoutUserInput = {
   category: string
   amountCents: number
   description?: string | null
+  remindMe?: boolean
   spentAt?: Date | string
   createdAt?: Date | string
 }
@@ -463,6 +486,7 @@ export type ExpenseUncheckedCreateWithoutUserInput = {
   category: string
   amountCents: number
   description?: string | null
+  remindMe?: boolean
   spentAt?: Date | string
   createdAt?: Date | string
 }
@@ -502,6 +526,7 @@ export type ExpenseScalarWhereInput = {
   category?: Prisma.StringFilter<"Expense"> | string
   amountCents?: Prisma.IntFilter<"Expense"> | number
   description?: Prisma.StringNullableFilter<"Expense"> | string | null
+  remindMe?: Prisma.BoolFilter<"Expense"> | boolean
   spentAt?: Prisma.DateTimeFilter<"Expense"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Expense"> | Date | string
 }
@@ -511,6 +536,7 @@ export type ExpenseCreateManyUserInput = {
   category: string
   amountCents: number
   description?: string | null
+  remindMe?: boolean
   spentAt?: Date | string
   createdAt?: Date | string
 }
@@ -520,6 +546,7 @@ export type ExpenseUpdateWithoutUserInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remindMe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   spentAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -529,6 +556,7 @@ export type ExpenseUncheckedUpdateWithoutUserInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remindMe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   spentAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -538,6 +566,7 @@ export type ExpenseUncheckedUpdateManyWithoutUserInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   amountCents?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remindMe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   spentAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -550,6 +579,7 @@ export type ExpenseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   category?: boolean
   amountCents?: boolean
   description?: boolean
+  remindMe?: boolean
   spentAt?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -561,6 +591,7 @@ export type ExpenseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   category?: boolean
   amountCents?: boolean
   description?: boolean
+  remindMe?: boolean
   spentAt?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -572,6 +603,7 @@ export type ExpenseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   category?: boolean
   amountCents?: boolean
   description?: boolean
+  remindMe?: boolean
   spentAt?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -583,11 +615,12 @@ export type ExpenseSelectScalar = {
   category?: boolean
   amountCents?: boolean
   description?: boolean
+  remindMe?: boolean
   spentAt?: boolean
   createdAt?: boolean
 }
 
-export type ExpenseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "category" | "amountCents" | "description" | "spentAt" | "createdAt", ExtArgs["result"]["expense"]>
+export type ExpenseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "category" | "amountCents" | "description" | "remindMe" | "spentAt" | "createdAt", ExtArgs["result"]["expense"]>
 export type ExpenseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -609,6 +642,7 @@ export type $ExpensePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     category: string
     amountCents: number
     description: string | null
+    remindMe: boolean
     spentAt: Date
     createdAt: Date
   }, ExtArgs["result"]["expense"]>
@@ -1040,6 +1074,7 @@ export interface ExpenseFieldRefs {
   readonly category: Prisma.FieldRef<"Expense", 'String'>
   readonly amountCents: Prisma.FieldRef<"Expense", 'Int'>
   readonly description: Prisma.FieldRef<"Expense", 'String'>
+  readonly remindMe: Prisma.FieldRef<"Expense", 'Boolean'>
   readonly spentAt: Prisma.FieldRef<"Expense", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Expense", 'DateTime'>
 }

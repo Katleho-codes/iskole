@@ -103,8 +103,9 @@ conversationsRouter.post('/conversations', requireSession, idempotent(), async (
 conversationsRouter.get('/conversations/:id/messages', requireSession, async (req, res, next) => {
   try {
     const userId = req.authUser!.id;
+    const conversationId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
     const conversation = await prisma.conversation.findUnique({
-      where: { id: req.params.id },
+      where: { id: conversationId },
       include: { initiator: { select: { id: true } }, recipient: { select: { id: true } } },
     });
     if (!conversation) return next(notFound('conversation not found'));
@@ -130,8 +131,9 @@ conversationsRouter.post('/conversations/:id/messages', requireSession, idempote
   try {
     const userId = req.authUser!.id;
     const input = MessageCreateSchema.parse(req.body);
+    const conversationId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
     const conversation = await prisma.conversation.findUnique({
-      where: { id: req.params.id },
+      where: { id: conversationId },
       include: { initiator: true, recipient: true },
     });
     if (!conversation) return next(notFound('conversation not found'));

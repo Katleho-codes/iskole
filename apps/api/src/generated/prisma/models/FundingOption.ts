@@ -324,6 +324,7 @@ export type FundingOptionWhereInput = {
   isActive?: Prisma.BoolFilter<"FundingOption"> | boolean
   createdAt?: Prisma.DateTimeFilter<"FundingOption"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FundingOption"> | Date | string
+  saved?: Prisma.SavedFundingListRelationFilter
 }
 
 export type FundingOptionOrderByWithRelationInput = {
@@ -345,6 +346,7 @@ export type FundingOptionOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  saved?: Prisma.SavedFundingOrderByRelationAggregateInput
 }
 
 export type FundingOptionWhereUniqueInput = Prisma.AtLeast<{
@@ -369,6 +371,7 @@ export type FundingOptionWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolFilter<"FundingOption"> | boolean
   createdAt?: Prisma.DateTimeFilter<"FundingOption"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FundingOption"> | Date | string
+  saved?: Prisma.SavedFundingListRelationFilter
 }, "id" | "name">
 
 export type FundingOptionOrderByWithAggregationInput = {
@@ -440,6 +443,7 @@ export type FundingOptionCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  saved?: Prisma.SavedFundingCreateNestedManyWithoutFundingOptionInput
 }
 
 export type FundingOptionUncheckedCreateInput = {
@@ -461,6 +465,7 @@ export type FundingOptionUncheckedCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  saved?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutFundingOptionInput
 }
 
 export type FundingOptionUpdateInput = {
@@ -482,6 +487,7 @@ export type FundingOptionUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  saved?: Prisma.SavedFundingUpdateManyWithoutFundingOptionNestedInput
 }
 
 export type FundingOptionUncheckedUpdateInput = {
@@ -503,6 +509,7 @@ export type FundingOptionUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  saved?: Prisma.SavedFundingUncheckedUpdateManyWithoutFundingOptionNestedInput
 }
 
 export type FundingOptionCreateManyInput = {
@@ -641,6 +648,154 @@ export type FundingOptionSumOrderByAggregateInput = {
   amountMax?: Prisma.SortOrder
 }
 
+export type FundingOptionScalarRelationFilter = {
+  is?: Prisma.FundingOptionWhereInput
+  isNot?: Prisma.FundingOptionWhereInput
+}
+
+export type FundingOptionCreateNestedOneWithoutSavedInput = {
+  create?: Prisma.XOR<Prisma.FundingOptionCreateWithoutSavedInput, Prisma.FundingOptionUncheckedCreateWithoutSavedInput>
+  connectOrCreate?: Prisma.FundingOptionCreateOrConnectWithoutSavedInput
+  connect?: Prisma.FundingOptionWhereUniqueInput
+}
+
+export type FundingOptionUpdateOneRequiredWithoutSavedNestedInput = {
+  create?: Prisma.XOR<Prisma.FundingOptionCreateWithoutSavedInput, Prisma.FundingOptionUncheckedCreateWithoutSavedInput>
+  connectOrCreate?: Prisma.FundingOptionCreateOrConnectWithoutSavedInput
+  upsert?: Prisma.FundingOptionUpsertWithoutSavedInput
+  connect?: Prisma.FundingOptionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FundingOptionUpdateToOneWithWhereWithoutSavedInput, Prisma.FundingOptionUpdateWithoutSavedInput>, Prisma.FundingOptionUncheckedUpdateWithoutSavedInput>
+}
+
+export type FundingOptionCreateWithoutSavedInput = {
+  id?: string
+  name: string
+  provider: string
+  type: string
+  description?: string | null
+  eligibility?: string | null
+  benefits?: string | null
+  coversTuition?: boolean
+  coversAccommodation?: boolean
+  coversBooks?: boolean
+  coversAllowance?: boolean
+  amountMin?: number | null
+  amountMax?: number | null
+  deadline?: Date | string | null
+  website?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FundingOptionUncheckedCreateWithoutSavedInput = {
+  id?: string
+  name: string
+  provider: string
+  type: string
+  description?: string | null
+  eligibility?: string | null
+  benefits?: string | null
+  coversTuition?: boolean
+  coversAccommodation?: boolean
+  coversBooks?: boolean
+  coversAllowance?: boolean
+  amountMin?: number | null
+  amountMax?: number | null
+  deadline?: Date | string | null
+  website?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FundingOptionCreateOrConnectWithoutSavedInput = {
+  where: Prisma.FundingOptionWhereUniqueInput
+  create: Prisma.XOR<Prisma.FundingOptionCreateWithoutSavedInput, Prisma.FundingOptionUncheckedCreateWithoutSavedInput>
+}
+
+export type FundingOptionUpsertWithoutSavedInput = {
+  update: Prisma.XOR<Prisma.FundingOptionUpdateWithoutSavedInput, Prisma.FundingOptionUncheckedUpdateWithoutSavedInput>
+  create: Prisma.XOR<Prisma.FundingOptionCreateWithoutSavedInput, Prisma.FundingOptionUncheckedCreateWithoutSavedInput>
+  where?: Prisma.FundingOptionWhereInput
+}
+
+export type FundingOptionUpdateToOneWithWhereWithoutSavedInput = {
+  where?: Prisma.FundingOptionWhereInput
+  data: Prisma.XOR<Prisma.FundingOptionUpdateWithoutSavedInput, Prisma.FundingOptionUncheckedUpdateWithoutSavedInput>
+}
+
+export type FundingOptionUpdateWithoutSavedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eligibility?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coversTuition?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  coversAccommodation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  coversBooks?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  coversAllowance?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  amountMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  amountMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type FundingOptionUncheckedUpdateWithoutSavedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eligibility?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  benefits?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coversTuition?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  coversAccommodation?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  coversBooks?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  coversAllowance?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  amountMin?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  amountMax?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type FundingOptionCountOutputType
+ */
+
+export type FundingOptionCountOutputType = {
+  saved: number
+}
+
+export type FundingOptionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  saved?: boolean | FundingOptionCountOutputTypeCountSavedArgs
+}
+
+/**
+ * FundingOptionCountOutputType without action
+ */
+export type FundingOptionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FundingOptionCountOutputType
+   */
+  select?: Prisma.FundingOptionCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * FundingOptionCountOutputType without action
+ */
+export type FundingOptionCountOutputTypeCountSavedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SavedFundingWhereInput
+}
 
 
 export type FundingOptionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -662,6 +817,8 @@ export type FundingOptionSelect<ExtArgs extends runtime.Types.Extensions.Interna
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  saved?: boolean | Prisma.FundingOption$savedArgs<ExtArgs>
+  _count?: boolean | Prisma.FundingOptionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["fundingOption"]>
 
 export type FundingOptionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -728,10 +885,18 @@ export type FundingOptionSelectScalar = {
 }
 
 export type FundingOptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "provider" | "type" | "description" | "eligibility" | "benefits" | "coversTuition" | "coversAccommodation" | "coversBooks" | "coversAllowance" | "amountMin" | "amountMax" | "deadline" | "website" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["fundingOption"]>
+export type FundingOptionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  saved?: boolean | Prisma.FundingOption$savedArgs<ExtArgs>
+  _count?: boolean | Prisma.FundingOptionCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type FundingOptionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type FundingOptionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $FundingOptionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "FundingOption"
-  objects: {}
+  objects: {
+    saved: Prisma.$SavedFundingPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
@@ -1145,6 +1310,7 @@ readonly fields: FundingOptionFieldRefs;
  */
 export interface Prisma__FundingOptionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  saved<T extends Prisma.FundingOption$savedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FundingOption$savedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedFundingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1209,6 +1375,10 @@ export type FundingOptionFindUniqueArgs<ExtArgs extends runtime.Types.Extensions
    */
   omit?: Prisma.FundingOptionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FundingOptionInclude<ExtArgs> | null
+  /**
    * Filter, which FundingOption to fetch.
    */
   where: Prisma.FundingOptionWhereUniqueInput
@@ -1227,6 +1397,10 @@ export type FundingOptionFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Ext
    */
   omit?: Prisma.FundingOptionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FundingOptionInclude<ExtArgs> | null
+  /**
    * Filter, which FundingOption to fetch.
    */
   where: Prisma.FundingOptionWhereUniqueInput
@@ -1244,6 +1418,10 @@ export type FundingOptionFindFirstArgs<ExtArgs extends runtime.Types.Extensions.
    * Omit specific fields from the FundingOption
    */
   omit?: Prisma.FundingOptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FundingOptionInclude<ExtArgs> | null
   /**
    * Filter, which FundingOption to fetch.
    */
@@ -1293,6 +1471,10 @@ export type FundingOptionFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exte
    */
   omit?: Prisma.FundingOptionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FundingOptionInclude<ExtArgs> | null
+  /**
    * Filter, which FundingOption to fetch.
    */
   where?: Prisma.FundingOptionWhereInput
@@ -1340,6 +1522,10 @@ export type FundingOptionFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the FundingOption
    */
   omit?: Prisma.FundingOptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FundingOptionInclude<ExtArgs> | null
   /**
    * Filter, which FundingOptions to fetch.
    */
@@ -1389,6 +1575,10 @@ export type FundingOptionCreateArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.FundingOptionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FundingOptionInclude<ExtArgs> | null
+  /**
    * The data needed to create a FundingOption.
    */
   data: Prisma.XOR<Prisma.FundingOptionCreateInput, Prisma.FundingOptionUncheckedCreateInput>
@@ -1436,6 +1626,10 @@ export type FundingOptionUpdateArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the FundingOption
    */
   omit?: Prisma.FundingOptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FundingOptionInclude<ExtArgs> | null
   /**
    * The data needed to update a FundingOption.
    */
@@ -1503,6 +1697,10 @@ export type FundingOptionUpsertArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.FundingOptionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FundingOptionInclude<ExtArgs> | null
+  /**
    * The filter to search for the FundingOption to update in case it exists.
    */
   where: Prisma.FundingOptionWhereUniqueInput
@@ -1529,6 +1727,10 @@ export type FundingOptionDeleteArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.FundingOptionOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FundingOptionInclude<ExtArgs> | null
+  /**
    * Filter which FundingOption to delete.
    */
   where: Prisma.FundingOptionWhereUniqueInput
@@ -1549,6 +1751,30 @@ export type FundingOptionDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
+ * FundingOption.saved
+ */
+export type FundingOption$savedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SavedFunding
+   */
+  select?: Prisma.SavedFundingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SavedFunding
+   */
+  omit?: Prisma.SavedFundingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SavedFundingInclude<ExtArgs> | null
+  where?: Prisma.SavedFundingWhereInput
+  orderBy?: Prisma.SavedFundingOrderByWithRelationInput | Prisma.SavedFundingOrderByWithRelationInput[]
+  cursor?: Prisma.SavedFundingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SavedFundingScalarFieldEnum | Prisma.SavedFundingScalarFieldEnum[]
+}
+
+/**
  * FundingOption without action
  */
 export type FundingOptionDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1560,4 +1786,8 @@ export type FundingOptionDefaultArgs<ExtArgs extends runtime.Types.Extensions.In
    * Omit specific fields from the FundingOption
    */
   omit?: Prisma.FundingOptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FundingOptionInclude<ExtArgs> | null
 }

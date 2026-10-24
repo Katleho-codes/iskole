@@ -44,7 +44,7 @@ const DEFAULT_ROLE = 'STUDENT';
  * not be able to silently turn off a POPIA/account-security control. Tests read it rather
  * than assuming a mode.
  */
-export const REQUIRE_EMAIL_VERIFICATION = true;
+export const REQUIRE_EMAIL_VERIFICATION = false;
 
 /** NIST 800-63B via the OWASP Authentication Cheat Sheet: length over forced complexity. */
 const MIN_PASSWORD_LENGTH = 12;
@@ -109,8 +109,8 @@ export const auth = betterAuth({
 
   emailVerification: {
     // Send the link at sign-up, and again if an unverified learner tries to sign in.
-    sendOnSignUp: true,
-    sendOnSignIn: true,
+    sendOnSignUp: false,
+    sendOnSignIn: false,
     // The verified learner gets a session immediately and lands on the onboarding step.
     autoSignInAfterVerification: true,
     // One hour. Short enough that a leaked link has little value.

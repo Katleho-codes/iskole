@@ -83,7 +83,11 @@ export const ModelName = {
   CommunityMute: 'CommunityMute',
   Conversation: 'Conversation',
   DirectMessage: 'DirectMessage',
-  Report: 'Report'
+  Report: 'Report',
+  SavedFunding: 'SavedFunding',
+  Notification: 'Notification',
+  MoneyPlan: 'MoneyPlan',
+  Consent: 'Consent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -413,6 +417,7 @@ export const ExpenseScalarFieldEnum = {
   category: 'category',
   amountCents: 'amountCents',
   description: 'description',
+  remindMe: 'remindMe',
   spentAt: 'spentAt',
   createdAt: 'createdAt'
 } as const
@@ -462,6 +467,7 @@ export const BookingScalarFieldEnum = {
   id: 'id',
   slotId: 'slotId',
   userId: 'userId',
+  reason: 'reason',
   status: 'status',
   createdAt: 'createdAt'
 } as const
@@ -551,6 +557,54 @@ export const ReportScalarFieldEnum = {
 } as const
 
 export type ReportScalarFieldEnum = (typeof ReportScalarFieldEnum)[keyof typeof ReportScalarFieldEnum]
+
+
+export const SavedFundingScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  fundingOptionId: 'fundingOptionId',
+  createdAt: 'createdAt'
+} as const
+
+export type SavedFundingScalarFieldEnum = (typeof SavedFundingScalarFieldEnum)[keyof typeof SavedFundingScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  body: 'body',
+  href: 'href',
+  dedupeKey: 'dedupeKey',
+  readAt: 'readAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const MoneyPlanScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  paydayDay: 'paydayDay',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MoneyPlanScalarFieldEnum = (typeof MoneyPlanScalarFieldEnum)[keyof typeof MoneyPlanScalarFieldEnum]
+
+
+export const ConsentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  purpose: 'purpose',
+  policyVersion: 'policyVersion',
+  grantedAt: 'grantedAt',
+  revokedAt: 'revokedAt'
+} as const
+
+export type ConsentScalarFieldEnum = (typeof ConsentScalarFieldEnum)[keyof typeof ConsentScalarFieldEnum]
 
 
 export const SortOrder = {

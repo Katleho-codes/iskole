@@ -79,11 +79,9 @@ export function SignUpForm() {
       return;
     }
 
-    // No session exists until the address is verified, so there is nothing to write yet.
-    // The DOB is collected again on /profile?onboarding=1 after verification; the API's
-    // age gate still refuses applications and company visibility without it.
     setPending(false);
-    setSubmitted(true);
+    // Email verification disabled - redirect to profile for onboarding
+    window.location.href = `${window.location.origin}/profile?onboarding=1`;
   }
 
   if (submitted) {

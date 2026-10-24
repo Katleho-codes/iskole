@@ -253,6 +253,10 @@ export type UserWhereInput = {
   conversationsAsInitiator?: Prisma.ConversationListRelationFilter
   conversationsAsRecipient?: Prisma.ConversationListRelationFilter
   directMessages?: Prisma.DirectMessageListRelationFilter
+  savedFunding?: Prisma.SavedFundingListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  moneyPlan?: Prisma.XOR<Prisma.MoneyPlanNullableScalarRelationFilter, Prisma.MoneyPlanWhereInput> | null
+  consents?: Prisma.ConsentListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -290,6 +294,10 @@ export type UserOrderByWithRelationInput = {
   conversationsAsInitiator?: Prisma.ConversationOrderByRelationAggregateInput
   conversationsAsRecipient?: Prisma.ConversationOrderByRelationAggregateInput
   directMessages?: Prisma.DirectMessageOrderByRelationAggregateInput
+  savedFunding?: Prisma.SavedFundingOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  moneyPlan?: Prisma.MoneyPlanOrderByWithRelationInput
+  consents?: Prisma.ConsentOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -330,6 +338,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   conversationsAsInitiator?: Prisma.ConversationListRelationFilter
   conversationsAsRecipient?: Prisma.ConversationListRelationFilter
   directMessages?: Prisma.DirectMessageListRelationFilter
+  savedFunding?: Prisma.SavedFundingListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  moneyPlan?: Prisma.XOR<Prisma.MoneyPlanNullableScalarRelationFilter, Prisma.MoneyPlanWhereInput> | null
+  consents?: Prisma.ConsentListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -401,6 +413,10 @@ export type UserCreateInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -438,6 +454,10 @@ export type UserUncheckedCreateInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -475,6 +495,10 @@ export type UserUpdateInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -512,6 +536,10 @@ export type UserUncheckedUpdateInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -958,6 +986,62 @@ export type UserUpdateOneRequiredWithoutReportsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReportsInput, Prisma.UserUpdateWithoutReportsInput>, Prisma.UserUncheckedUpdateWithoutReportsInput>
 }
 
+export type UserCreateNestedOneWithoutSavedFundingInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavedFundingInput, Prisma.UserUncheckedCreateWithoutSavedFundingInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedFundingInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSavedFundingNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavedFundingInput, Prisma.UserUncheckedCreateWithoutSavedFundingInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedFundingInput
+  upsert?: Prisma.UserUpsertWithoutSavedFundingInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSavedFundingInput, Prisma.UserUpdateWithoutSavedFundingInput>, Prisma.UserUncheckedUpdateWithoutSavedFundingInput>
+}
+
+export type UserCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.UserUpsertWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserCreateNestedOneWithoutMoneyPlanInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMoneyPlanInput, Prisma.UserUncheckedCreateWithoutMoneyPlanInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMoneyPlanInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutMoneyPlanNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMoneyPlanInput, Prisma.UserUncheckedCreateWithoutMoneyPlanInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMoneyPlanInput
+  upsert?: Prisma.UserUpsertWithoutMoneyPlanInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMoneyPlanInput, Prisma.UserUpdateWithoutMoneyPlanInput>, Prisma.UserUncheckedUpdateWithoutMoneyPlanInput>
+}
+
+export type UserCreateNestedOneWithoutConsentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConsentsInput, Prisma.UserUncheckedCreateWithoutConsentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConsentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutConsentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConsentsInput, Prisma.UserUncheckedCreateWithoutConsentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConsentsInput
+  upsert?: Prisma.UserUpsertWithoutConsentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutConsentsInput, Prisma.UserUpdateWithoutConsentsInput>, Prisma.UserUncheckedUpdateWithoutConsentsInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id: string
   name: string
@@ -992,6 +1076,10 @@ export type UserCreateWithoutSessionsInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -1028,6 +1116,10 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1080,6 +1172,10 @@ export type UserUpdateWithoutSessionsInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1116,6 +1212,10 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -1152,6 +1252,10 @@ export type UserCreateWithoutAccountsInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -1188,6 +1292,10 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -1240,6 +1348,10 @@ export type UserUpdateWithoutAccountsInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -1276,6 +1388,10 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSecurityEventsInput = {
@@ -1312,6 +1428,10 @@ export type UserCreateWithoutSecurityEventsInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSecurityEventsInput = {
@@ -1348,6 +1468,10 @@ export type UserUncheckedCreateWithoutSecurityEventsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSecurityEventsInput = {
@@ -1400,6 +1524,10 @@ export type UserUpdateWithoutSecurityEventsInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSecurityEventsInput = {
@@ -1436,6 +1564,10 @@ export type UserUncheckedUpdateWithoutSecurityEventsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -1472,6 +1604,10 @@ export type UserCreateWithoutAuditLogsInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -1508,6 +1644,10 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -1560,6 +1700,10 @@ export type UserUpdateWithoutAuditLogsInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -1596,6 +1740,10 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutIdempotencyKeysInput = {
@@ -1632,6 +1780,10 @@ export type UserCreateWithoutIdempotencyKeysInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutIdempotencyKeysInput = {
@@ -1668,6 +1820,10 @@ export type UserUncheckedCreateWithoutIdempotencyKeysInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutIdempotencyKeysInput = {
@@ -1720,6 +1876,10 @@ export type UserUpdateWithoutIdempotencyKeysInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutIdempotencyKeysInput = {
@@ -1756,6 +1916,10 @@ export type UserUncheckedUpdateWithoutIdempotencyKeysInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutProfileInput = {
@@ -1792,6 +1956,10 @@ export type UserCreateWithoutProfileInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProfileInput = {
@@ -1828,6 +1996,10 @@ export type UserUncheckedCreateWithoutProfileInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProfileInput = {
@@ -1880,6 +2052,10 @@ export type UserUpdateWithoutProfileInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfileInput = {
@@ -1916,6 +2092,10 @@ export type UserUncheckedUpdateWithoutProfileInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCompanyProfileInput = {
@@ -1952,6 +2132,10 @@ export type UserCreateWithoutCompanyProfileInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCompanyProfileInput = {
@@ -1988,6 +2172,10 @@ export type UserUncheckedCreateWithoutCompanyProfileInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCompanyProfileInput = {
@@ -2040,6 +2228,10 @@ export type UserUpdateWithoutCompanyProfileInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCompanyProfileInput = {
@@ -2076,6 +2268,10 @@ export type UserUncheckedUpdateWithoutCompanyProfileInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutGuardianConsentInput = {
@@ -2112,6 +2308,10 @@ export type UserCreateWithoutGuardianConsentInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutGuardianConsentInput = {
@@ -2148,6 +2348,10 @@ export type UserUncheckedCreateWithoutGuardianConsentInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutGuardianConsentInput = {
@@ -2200,6 +2404,10 @@ export type UserUpdateWithoutGuardianConsentInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGuardianConsentInput = {
@@ -2236,6 +2444,10 @@ export type UserUncheckedUpdateWithoutGuardianConsentInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPreferencesInput = {
@@ -2272,6 +2484,10 @@ export type UserCreateWithoutPreferencesInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPreferencesInput = {
@@ -2308,6 +2524,10 @@ export type UserUncheckedCreateWithoutPreferencesInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPreferencesInput = {
@@ -2360,6 +2580,10 @@ export type UserUpdateWithoutPreferencesInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPreferencesInput = {
@@ -2396,6 +2620,10 @@ export type UserUncheckedUpdateWithoutPreferencesInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSubjectMarksInput = {
@@ -2432,6 +2660,10 @@ export type UserCreateWithoutSubjectMarksInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSubjectMarksInput = {
@@ -2468,6 +2700,10 @@ export type UserUncheckedCreateWithoutSubjectMarksInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSubjectMarksInput = {
@@ -2520,6 +2756,10 @@ export type UserUpdateWithoutSubjectMarksInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubjectMarksInput = {
@@ -2556,6 +2796,10 @@ export type UserUncheckedUpdateWithoutSubjectMarksInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutApplicationsInput = {
@@ -2592,6 +2836,10 @@ export type UserCreateWithoutApplicationsInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutApplicationsInput = {
@@ -2628,6 +2876,10 @@ export type UserUncheckedCreateWithoutApplicationsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutApplicationsInput = {
@@ -2680,6 +2932,10 @@ export type UserUpdateWithoutApplicationsInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutApplicationsInput = {
@@ -2716,6 +2972,10 @@ export type UserUncheckedUpdateWithoutApplicationsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutExpensesInput = {
@@ -2752,6 +3012,10 @@ export type UserCreateWithoutExpensesInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutExpensesInput = {
@@ -2788,6 +3052,10 @@ export type UserUncheckedCreateWithoutExpensesInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutExpensesInput = {
@@ -2840,6 +3108,10 @@ export type UserUpdateWithoutExpensesInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutExpensesInput = {
@@ -2876,6 +3148,10 @@ export type UserUncheckedUpdateWithoutExpensesInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBudgetsInput = {
@@ -2912,6 +3188,10 @@ export type UserCreateWithoutBudgetsInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBudgetsInput = {
@@ -2948,6 +3228,10 @@ export type UserUncheckedCreateWithoutBudgetsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBudgetsInput = {
@@ -3000,6 +3284,10 @@ export type UserUpdateWithoutBudgetsInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBudgetsInput = {
@@ -3036,6 +3324,10 @@ export type UserUncheckedUpdateWithoutBudgetsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStudyPlansInput = {
@@ -3072,6 +3364,10 @@ export type UserCreateWithoutStudyPlansInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStudyPlansInput = {
@@ -3108,6 +3404,10 @@ export type UserUncheckedCreateWithoutStudyPlansInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStudyPlansInput = {
@@ -3160,6 +3460,10 @@ export type UserUpdateWithoutStudyPlansInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudyPlansInput = {
@@ -3196,6 +3500,10 @@ export type UserUncheckedUpdateWithoutStudyPlansInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBookingsInput = {
@@ -3232,6 +3540,10 @@ export type UserCreateWithoutBookingsInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBookingsInput = {
@@ -3268,6 +3580,10 @@ export type UserUncheckedCreateWithoutBookingsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBookingsInput = {
@@ -3320,6 +3636,10 @@ export type UserUpdateWithoutBookingsInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBookingsInput = {
@@ -3356,6 +3676,10 @@ export type UserUncheckedUpdateWithoutBookingsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutMessagesInput = {
@@ -3392,6 +3716,10 @@ export type UserCreateWithoutMessagesInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMessagesInput = {
@@ -3428,6 +3756,10 @@ export type UserUncheckedCreateWithoutMessagesInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMessagesInput = {
@@ -3480,6 +3812,10 @@ export type UserUpdateWithoutMessagesInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMessagesInput = {
@@ -3516,6 +3852,10 @@ export type UserUncheckedUpdateWithoutMessagesInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBlockingUsersInput = {
@@ -3552,6 +3892,10 @@ export type UserCreateWithoutBlockingUsersInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBlockingUsersInput = {
@@ -3588,6 +3932,10 @@ export type UserUncheckedCreateWithoutBlockingUsersInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBlockingUsersInput = {
@@ -3629,6 +3977,10 @@ export type UserCreateWithoutBlockedUsersInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBlockedUsersInput = {
@@ -3665,6 +4017,10 @@ export type UserUncheckedCreateWithoutBlockedUsersInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBlockedUsersInput = {
@@ -3717,6 +4073,10 @@ export type UserUpdateWithoutBlockingUsersInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBlockingUsersInput = {
@@ -3753,6 +4113,10 @@ export type UserUncheckedUpdateWithoutBlockingUsersInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutBlockedUsersInput = {
@@ -3800,6 +4164,10 @@ export type UserUpdateWithoutBlockedUsersInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBlockedUsersInput = {
@@ -3836,6 +4204,10 @@ export type UserUncheckedUpdateWithoutBlockedUsersInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutMutedCommunitiesInput = {
@@ -3872,6 +4244,10 @@ export type UserCreateWithoutMutedCommunitiesInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMutedCommunitiesInput = {
@@ -3908,6 +4284,10 @@ export type UserUncheckedCreateWithoutMutedCommunitiesInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMutedCommunitiesInput = {
@@ -3960,6 +4340,10 @@ export type UserUpdateWithoutMutedCommunitiesInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMutedCommunitiesInput = {
@@ -3996,6 +4380,10 @@ export type UserUncheckedUpdateWithoutMutedCommunitiesInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutConversationsAsInitiatorInput = {
@@ -4032,6 +4420,10 @@ export type UserCreateWithoutConversationsAsInitiatorInput = {
   mutedCommunities?: Prisma.CommunityMuteCreateNestedManyWithoutUserInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutConversationsAsInitiatorInput = {
@@ -4068,6 +4460,10 @@ export type UserUncheckedCreateWithoutConversationsAsInitiatorInput = {
   mutedCommunities?: Prisma.CommunityMuteUncheckedCreateNestedManyWithoutUserInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutConversationsAsInitiatorInput = {
@@ -4109,6 +4505,10 @@ export type UserCreateWithoutConversationsAsRecipientInput = {
   mutedCommunities?: Prisma.CommunityMuteCreateNestedManyWithoutUserInput
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutConversationsAsRecipientInput = {
@@ -4145,6 +4545,10 @@ export type UserUncheckedCreateWithoutConversationsAsRecipientInput = {
   mutedCommunities?: Prisma.CommunityMuteUncheckedCreateNestedManyWithoutUserInput
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutConversationsAsRecipientInput = {
@@ -4197,6 +4601,10 @@ export type UserUpdateWithoutConversationsAsInitiatorInput = {
   mutedCommunities?: Prisma.CommunityMuteUpdateManyWithoutUserNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConversationsAsInitiatorInput = {
@@ -4233,6 +4641,10 @@ export type UserUncheckedUpdateWithoutConversationsAsInitiatorInput = {
   mutedCommunities?: Prisma.CommunityMuteUncheckedUpdateManyWithoutUserNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutConversationsAsRecipientInput = {
@@ -4280,6 +4692,10 @@ export type UserUpdateWithoutConversationsAsRecipientInput = {
   mutedCommunities?: Prisma.CommunityMuteUpdateManyWithoutUserNestedInput
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConversationsAsRecipientInput = {
@@ -4316,6 +4732,10 @@ export type UserUncheckedUpdateWithoutConversationsAsRecipientInput = {
   mutedCommunities?: Prisma.CommunityMuteUncheckedUpdateManyWithoutUserNestedInput
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutDirectMessagesInput = {
@@ -4352,6 +4772,10 @@ export type UserCreateWithoutDirectMessagesInput = {
   mutedCommunities?: Prisma.CommunityMuteCreateNestedManyWithoutUserInput
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDirectMessagesInput = {
@@ -4388,6 +4812,10 @@ export type UserUncheckedCreateWithoutDirectMessagesInput = {
   mutedCommunities?: Prisma.CommunityMuteUncheckedCreateNestedManyWithoutUserInput
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutDirectMessagesInput = {
@@ -4440,6 +4868,10 @@ export type UserUpdateWithoutDirectMessagesInput = {
   mutedCommunities?: Prisma.CommunityMuteUpdateManyWithoutUserNestedInput
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDirectMessagesInput = {
@@ -4476,6 +4908,10 @@ export type UserUncheckedUpdateWithoutDirectMessagesInput = {
   mutedCommunities?: Prisma.CommunityMuteUncheckedUpdateManyWithoutUserNestedInput
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutReportsInput = {
@@ -4512,6 +4948,10 @@ export type UserCreateWithoutReportsInput = {
   conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReportsInput = {
@@ -4548,6 +4988,10 @@ export type UserUncheckedCreateWithoutReportsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
   directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReportsInput = {
@@ -4600,6 +5044,10 @@ export type UserUpdateWithoutReportsInput = {
   conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReportsInput = {
@@ -4636,6 +5084,714 @@ export type UserUncheckedUpdateWithoutReportsInput = {
   conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
   conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
   directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSavedFundingInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityEventCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  companyProfile?: Prisma.CompanyProfileCreateNestedOneWithoutUserInput
+  guardianConsent?: Prisma.GuardianConsentCreateNestedOneWithoutUserInput
+  preferences?: Prisma.PreferenceCreateNestedOneWithoutUserInput
+  subjectMarks?: Prisma.SubjectMarkCreateNestedManyWithoutUserInput
+  applications?: Prisma.ApplicationCreateNestedManyWithoutUserInput
+  idempotencyKeys?: Prisma.IdempotencyKeyCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  studyPlans?: Prisma.StudyPlanCreateNestedManyWithoutUserInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutUserInput
+  reports?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  blockedUsers?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
+  blockingUsers?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
+  mutedCommunities?: Prisma.CommunityMuteCreateNestedManyWithoutUserInput
+  conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
+  conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
+  directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSavedFundingInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityEventUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  companyProfile?: Prisma.CompanyProfileUncheckedCreateNestedOneWithoutUserInput
+  guardianConsent?: Prisma.GuardianConsentUncheckedCreateNestedOneWithoutUserInput
+  preferences?: Prisma.PreferenceUncheckedCreateNestedOneWithoutUserInput
+  subjectMarks?: Prisma.SubjectMarkUncheckedCreateNestedManyWithoutUserInput
+  applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutUserInput
+  idempotencyKeys?: Prisma.IdempotencyKeyUncheckedCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  studyPlans?: Prisma.StudyPlanUncheckedCreateNestedManyWithoutUserInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutUserInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  blockedUsers?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
+  blockingUsers?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
+  mutedCommunities?: Prisma.CommunityMuteUncheckedCreateNestedManyWithoutUserInput
+  conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
+  conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
+  directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSavedFundingInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavedFundingInput, Prisma.UserUncheckedCreateWithoutSavedFundingInput>
+}
+
+export type UserUpsertWithoutSavedFundingInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSavedFundingInput, Prisma.UserUncheckedUpdateWithoutSavedFundingInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavedFundingInput, Prisma.UserUncheckedCreateWithoutSavedFundingInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSavedFundingInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSavedFundingInput, Prisma.UserUncheckedUpdateWithoutSavedFundingInput>
+}
+
+export type UserUpdateWithoutSavedFundingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityEventUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  companyProfile?: Prisma.CompanyProfileUpdateOneWithoutUserNestedInput
+  guardianConsent?: Prisma.GuardianConsentUpdateOneWithoutUserNestedInput
+  preferences?: Prisma.PreferenceUpdateOneWithoutUserNestedInput
+  subjectMarks?: Prisma.SubjectMarkUpdateManyWithoutUserNestedInput
+  applications?: Prisma.ApplicationUpdateManyWithoutUserNestedInput
+  idempotencyKeys?: Prisma.IdempotencyKeyUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  studyPlans?: Prisma.StudyPlanUpdateManyWithoutUserNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutUserNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  blockedUsers?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
+  blockingUsers?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
+  mutedCommunities?: Prisma.CommunityMuteUpdateManyWithoutUserNestedInput
+  conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
+  conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
+  directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSavedFundingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityEventUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  companyProfile?: Prisma.CompanyProfileUncheckedUpdateOneWithoutUserNestedInput
+  guardianConsent?: Prisma.GuardianConsentUncheckedUpdateOneWithoutUserNestedInput
+  preferences?: Prisma.PreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subjectMarks?: Prisma.SubjectMarkUncheckedUpdateManyWithoutUserNestedInput
+  applications?: Prisma.ApplicationUncheckedUpdateManyWithoutUserNestedInput
+  idempotencyKeys?: Prisma.IdempotencyKeyUncheckedUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  studyPlans?: Prisma.StudyPlanUncheckedUpdateManyWithoutUserNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  blockedUsers?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
+  blockingUsers?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
+  mutedCommunities?: Prisma.CommunityMuteUncheckedUpdateManyWithoutUserNestedInput
+  conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
+  conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutNotificationsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityEventCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  companyProfile?: Prisma.CompanyProfileCreateNestedOneWithoutUserInput
+  guardianConsent?: Prisma.GuardianConsentCreateNestedOneWithoutUserInput
+  preferences?: Prisma.PreferenceCreateNestedOneWithoutUserInput
+  subjectMarks?: Prisma.SubjectMarkCreateNestedManyWithoutUserInput
+  applications?: Prisma.ApplicationCreateNestedManyWithoutUserInput
+  idempotencyKeys?: Prisma.IdempotencyKeyCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  studyPlans?: Prisma.StudyPlanCreateNestedManyWithoutUserInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutUserInput
+  reports?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  blockedUsers?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
+  blockingUsers?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
+  mutedCommunities?: Prisma.CommunityMuteCreateNestedManyWithoutUserInput
+  conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
+  conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
+  directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutNotificationsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityEventUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  companyProfile?: Prisma.CompanyProfileUncheckedCreateNestedOneWithoutUserInput
+  guardianConsent?: Prisma.GuardianConsentUncheckedCreateNestedOneWithoutUserInput
+  preferences?: Prisma.PreferenceUncheckedCreateNestedOneWithoutUserInput
+  subjectMarks?: Prisma.SubjectMarkUncheckedCreateNestedManyWithoutUserInput
+  applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutUserInput
+  idempotencyKeys?: Prisma.IdempotencyKeyUncheckedCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  studyPlans?: Prisma.StudyPlanUncheckedCreateNestedManyWithoutUserInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutUserInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  blockedUsers?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
+  blockingUsers?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
+  mutedCommunities?: Prisma.CommunityMuteUncheckedCreateNestedManyWithoutUserInput
+  conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
+  conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
+  directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+}
+
+export type UserUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityEventUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  companyProfile?: Prisma.CompanyProfileUpdateOneWithoutUserNestedInput
+  guardianConsent?: Prisma.GuardianConsentUpdateOneWithoutUserNestedInput
+  preferences?: Prisma.PreferenceUpdateOneWithoutUserNestedInput
+  subjectMarks?: Prisma.SubjectMarkUpdateManyWithoutUserNestedInput
+  applications?: Prisma.ApplicationUpdateManyWithoutUserNestedInput
+  idempotencyKeys?: Prisma.IdempotencyKeyUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  studyPlans?: Prisma.StudyPlanUpdateManyWithoutUserNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutUserNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  blockedUsers?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
+  blockingUsers?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
+  mutedCommunities?: Prisma.CommunityMuteUpdateManyWithoutUserNestedInput
+  conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
+  conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
+  directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityEventUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  companyProfile?: Prisma.CompanyProfileUncheckedUpdateOneWithoutUserNestedInput
+  guardianConsent?: Prisma.GuardianConsentUncheckedUpdateOneWithoutUserNestedInput
+  preferences?: Prisma.PreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subjectMarks?: Prisma.SubjectMarkUncheckedUpdateManyWithoutUserNestedInput
+  applications?: Prisma.ApplicationUncheckedUpdateManyWithoutUserNestedInput
+  idempotencyKeys?: Prisma.IdempotencyKeyUncheckedUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  studyPlans?: Prisma.StudyPlanUncheckedUpdateManyWithoutUserNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  blockedUsers?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
+  blockingUsers?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
+  mutedCommunities?: Prisma.CommunityMuteUncheckedUpdateManyWithoutUserNestedInput
+  conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
+  conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutMoneyPlanInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityEventCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  companyProfile?: Prisma.CompanyProfileCreateNestedOneWithoutUserInput
+  guardianConsent?: Prisma.GuardianConsentCreateNestedOneWithoutUserInput
+  preferences?: Prisma.PreferenceCreateNestedOneWithoutUserInput
+  subjectMarks?: Prisma.SubjectMarkCreateNestedManyWithoutUserInput
+  applications?: Prisma.ApplicationCreateNestedManyWithoutUserInput
+  idempotencyKeys?: Prisma.IdempotencyKeyCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  studyPlans?: Prisma.StudyPlanCreateNestedManyWithoutUserInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutUserInput
+  reports?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  blockedUsers?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
+  blockingUsers?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
+  mutedCommunities?: Prisma.CommunityMuteCreateNestedManyWithoutUserInput
+  conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
+  conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
+  directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  consents?: Prisma.ConsentCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutMoneyPlanInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityEventUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  companyProfile?: Prisma.CompanyProfileUncheckedCreateNestedOneWithoutUserInput
+  guardianConsent?: Prisma.GuardianConsentUncheckedCreateNestedOneWithoutUserInput
+  preferences?: Prisma.PreferenceUncheckedCreateNestedOneWithoutUserInput
+  subjectMarks?: Prisma.SubjectMarkUncheckedCreateNestedManyWithoutUserInput
+  applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutUserInput
+  idempotencyKeys?: Prisma.IdempotencyKeyUncheckedCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  studyPlans?: Prisma.StudyPlanUncheckedCreateNestedManyWithoutUserInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutUserInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  blockedUsers?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
+  blockingUsers?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
+  mutedCommunities?: Prisma.CommunityMuteUncheckedCreateNestedManyWithoutUserInput
+  conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
+  conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
+  directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.ConsentUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutMoneyPlanInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMoneyPlanInput, Prisma.UserUncheckedCreateWithoutMoneyPlanInput>
+}
+
+export type UserUpsertWithoutMoneyPlanInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMoneyPlanInput, Prisma.UserUncheckedUpdateWithoutMoneyPlanInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMoneyPlanInput, Prisma.UserUncheckedCreateWithoutMoneyPlanInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMoneyPlanInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMoneyPlanInput, Prisma.UserUncheckedUpdateWithoutMoneyPlanInput>
+}
+
+export type UserUpdateWithoutMoneyPlanInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityEventUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  companyProfile?: Prisma.CompanyProfileUpdateOneWithoutUserNestedInput
+  guardianConsent?: Prisma.GuardianConsentUpdateOneWithoutUserNestedInput
+  preferences?: Prisma.PreferenceUpdateOneWithoutUserNestedInput
+  subjectMarks?: Prisma.SubjectMarkUpdateManyWithoutUserNestedInput
+  applications?: Prisma.ApplicationUpdateManyWithoutUserNestedInput
+  idempotencyKeys?: Prisma.IdempotencyKeyUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  studyPlans?: Prisma.StudyPlanUpdateManyWithoutUserNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutUserNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  blockedUsers?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
+  blockingUsers?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
+  mutedCommunities?: Prisma.CommunityMuteUpdateManyWithoutUserNestedInput
+  conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
+  conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
+  directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  consents?: Prisma.ConsentUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMoneyPlanInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityEventUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  companyProfile?: Prisma.CompanyProfileUncheckedUpdateOneWithoutUserNestedInput
+  guardianConsent?: Prisma.GuardianConsentUncheckedUpdateOneWithoutUserNestedInput
+  preferences?: Prisma.PreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subjectMarks?: Prisma.SubjectMarkUncheckedUpdateManyWithoutUserNestedInput
+  applications?: Prisma.ApplicationUncheckedUpdateManyWithoutUserNestedInput
+  idempotencyKeys?: Prisma.IdempotencyKeyUncheckedUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  studyPlans?: Prisma.StudyPlanUncheckedUpdateManyWithoutUserNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  blockedUsers?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
+  blockingUsers?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
+  mutedCommunities?: Prisma.CommunityMuteUncheckedUpdateManyWithoutUserNestedInput
+  conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
+  conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.ConsentUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutConsentsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityEventCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  companyProfile?: Prisma.CompanyProfileCreateNestedOneWithoutUserInput
+  guardianConsent?: Prisma.GuardianConsentCreateNestedOneWithoutUserInput
+  preferences?: Prisma.PreferenceCreateNestedOneWithoutUserInput
+  subjectMarks?: Prisma.SubjectMarkCreateNestedManyWithoutUserInput
+  applications?: Prisma.ApplicationCreateNestedManyWithoutUserInput
+  idempotencyKeys?: Prisma.IdempotencyKeyCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  studyPlans?: Prisma.StudyPlanCreateNestedManyWithoutUserInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageCreateNestedManyWithoutUserInput
+  reports?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  blockedUsers?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
+  blockingUsers?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
+  mutedCommunities?: Prisma.CommunityMuteCreateNestedManyWithoutUserInput
+  conversationsAsInitiator?: Prisma.ConversationCreateNestedManyWithoutInitiatorInput
+  conversationsAsRecipient?: Prisma.ConversationCreateNestedManyWithoutRecipientInput
+  directMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutConsentsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: string | null
+  banned?: boolean | null
+  banReason?: string | null
+  banExpires?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  securityEvents?: Prisma.SecurityEventUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  companyProfile?: Prisma.CompanyProfileUncheckedCreateNestedOneWithoutUserInput
+  guardianConsent?: Prisma.GuardianConsentUncheckedCreateNestedOneWithoutUserInput
+  preferences?: Prisma.PreferenceUncheckedCreateNestedOneWithoutUserInput
+  subjectMarks?: Prisma.SubjectMarkUncheckedCreateNestedManyWithoutUserInput
+  applications?: Prisma.ApplicationUncheckedCreateNestedManyWithoutUserInput
+  idempotencyKeys?: Prisma.IdempotencyKeyUncheckedCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  studyPlans?: Prisma.StudyPlanUncheckedCreateNestedManyWithoutUserInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutUserInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  blockedUsers?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
+  blockingUsers?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
+  mutedCommunities?: Prisma.CommunityMuteUncheckedCreateNestedManyWithoutUserInput
+  conversationsAsInitiator?: Prisma.ConversationUncheckedCreateNestedManyWithoutInitiatorInput
+  conversationsAsRecipient?: Prisma.ConversationUncheckedCreateNestedManyWithoutRecipientInput
+  directMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  savedFunding?: Prisma.SavedFundingUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutConsentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutConsentsInput, Prisma.UserUncheckedCreateWithoutConsentsInput>
+}
+
+export type UserUpsertWithoutConsentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutConsentsInput, Prisma.UserUncheckedUpdateWithoutConsentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutConsentsInput, Prisma.UserUncheckedCreateWithoutConsentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutConsentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutConsentsInput, Prisma.UserUncheckedUpdateWithoutConsentsInput>
+}
+
+export type UserUpdateWithoutConsentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityEventUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  companyProfile?: Prisma.CompanyProfileUpdateOneWithoutUserNestedInput
+  guardianConsent?: Prisma.GuardianConsentUpdateOneWithoutUserNestedInput
+  preferences?: Prisma.PreferenceUpdateOneWithoutUserNestedInput
+  subjectMarks?: Prisma.SubjectMarkUpdateManyWithoutUserNestedInput
+  applications?: Prisma.ApplicationUpdateManyWithoutUserNestedInput
+  idempotencyKeys?: Prisma.IdempotencyKeyUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  studyPlans?: Prisma.StudyPlanUpdateManyWithoutUserNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUpdateManyWithoutUserNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  blockedUsers?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
+  blockingUsers?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
+  mutedCommunities?: Prisma.CommunityMuteUpdateManyWithoutUserNestedInput
+  conversationsAsInitiator?: Prisma.ConversationUpdateManyWithoutInitiatorNestedInput
+  conversationsAsRecipient?: Prisma.ConversationUpdateManyWithoutRecipientNestedInput
+  directMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutConsentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banned?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  banExpires?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  securityEvents?: Prisma.SecurityEventUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  companyProfile?: Prisma.CompanyProfileUncheckedUpdateOneWithoutUserNestedInput
+  guardianConsent?: Prisma.GuardianConsentUncheckedUpdateOneWithoutUserNestedInput
+  preferences?: Prisma.PreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subjectMarks?: Prisma.SubjectMarkUncheckedUpdateManyWithoutUserNestedInput
+  applications?: Prisma.ApplicationUncheckedUpdateManyWithoutUserNestedInput
+  idempotencyKeys?: Prisma.IdempotencyKeyUncheckedUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  studyPlans?: Prisma.StudyPlanUncheckedUpdateManyWithoutUserNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  blockedUsers?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
+  blockingUsers?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
+  mutedCommunities?: Prisma.CommunityMuteUncheckedUpdateManyWithoutUserNestedInput
+  conversationsAsInitiator?: Prisma.ConversationUncheckedUpdateManyWithoutInitiatorNestedInput
+  conversationsAsRecipient?: Prisma.ConversationUncheckedUpdateManyWithoutRecipientNestedInput
+  directMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  savedFunding?: Prisma.SavedFundingUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  moneyPlan?: Prisma.MoneyPlanUncheckedUpdateOneWithoutUserNestedInput
 }
 
 
@@ -4663,6 +5819,9 @@ export type UserCountOutputType = {
   conversationsAsInitiator: number
   conversationsAsRecipient: number
   directMessages: number
+  savedFunding: number
+  notifications: number
+  consents: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4685,6 +5844,9 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   conversationsAsInitiator?: boolean | UserCountOutputTypeCountConversationsAsInitiatorArgs
   conversationsAsRecipient?: boolean | UserCountOutputTypeCountConversationsAsRecipientArgs
   directMessages?: boolean | UserCountOutputTypeCountDirectMessagesArgs
+  savedFunding?: boolean | UserCountOutputTypeCountSavedFundingArgs
+  notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+  consents?: boolean | UserCountOutputTypeCountConsentsArgs
 }
 
 /**
@@ -4830,6 +5992,27 @@ export type UserCountOutputTypeCountDirectMessagesArgs<ExtArgs extends runtime.T
   where?: Prisma.DirectMessageWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSavedFundingArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SavedFundingWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountConsentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConsentWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -4866,6 +6049,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   conversationsAsInitiator?: boolean | Prisma.User$conversationsAsInitiatorArgs<ExtArgs>
   conversationsAsRecipient?: boolean | Prisma.User$conversationsAsRecipientArgs<ExtArgs>
   directMessages?: boolean | Prisma.User$directMessagesArgs<ExtArgs>
+  savedFunding?: boolean | Prisma.User$savedFundingArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  moneyPlan?: boolean | Prisma.User$moneyPlanArgs<ExtArgs>
+  consents?: boolean | Prisma.User$consentsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -4936,6 +6123,10 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   conversationsAsInitiator?: boolean | Prisma.User$conversationsAsInitiatorArgs<ExtArgs>
   conversationsAsRecipient?: boolean | Prisma.User$conversationsAsRecipientArgs<ExtArgs>
   directMessages?: boolean | Prisma.User$directMessagesArgs<ExtArgs>
+  savedFunding?: boolean | Prisma.User$savedFundingArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  moneyPlan?: boolean | Prisma.User$moneyPlanArgs<ExtArgs>
+  consents?: boolean | Prisma.User$consentsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -4967,6 +6158,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     conversationsAsInitiator: Prisma.$ConversationPayload<ExtArgs>[]
     conversationsAsRecipient: Prisma.$ConversationPayload<ExtArgs>[]
     directMessages: Prisma.$DirectMessagePayload<ExtArgs>[]
+    savedFunding: Prisma.$SavedFundingPayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    moneyPlan: Prisma.$MoneyPlanPayload<ExtArgs> | null
+    consents: Prisma.$ConsentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -5397,6 +6592,10 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   conversationsAsInitiator<T extends Prisma.User$conversationsAsInitiatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$conversationsAsInitiatorArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversationsAsRecipient<T extends Prisma.User$conversationsAsRecipientArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$conversationsAsRecipientArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   directMessages<T extends Prisma.User$directMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$directMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DirectMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  savedFunding<T extends Prisma.User$savedFundingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$savedFundingArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedFundingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  moneyPlan<T extends Prisma.User$moneyPlanArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$moneyPlanArgs<ExtArgs>>): Prisma.Prisma__MoneyPlanClient<runtime.Types.Result.GetResult<Prisma.$MoneyPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  consents<T extends Prisma.User$consentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$consentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6359,6 +7558,97 @@ export type User$directMessagesArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.DirectMessageScalarFieldEnum | Prisma.DirectMessageScalarFieldEnum[]
+}
+
+/**
+ * User.savedFunding
+ */
+export type User$savedFundingArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SavedFunding
+   */
+  select?: Prisma.SavedFundingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SavedFunding
+   */
+  omit?: Prisma.SavedFundingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SavedFundingInclude<ExtArgs> | null
+  where?: Prisma.SavedFundingWhereInput
+  orderBy?: Prisma.SavedFundingOrderByWithRelationInput | Prisma.SavedFundingOrderByWithRelationInput[]
+  cursor?: Prisma.SavedFundingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SavedFundingScalarFieldEnum | Prisma.SavedFundingScalarFieldEnum[]
+}
+
+/**
+ * User.notifications
+ */
+export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * User.moneyPlan
+ */
+export type User$moneyPlanArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MoneyPlan
+   */
+  select?: Prisma.MoneyPlanSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MoneyPlan
+   */
+  omit?: Prisma.MoneyPlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MoneyPlanInclude<ExtArgs> | null
+  where?: Prisma.MoneyPlanWhereInput
+}
+
+/**
+ * User.consents
+ */
+export type User$consentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Consent
+   */
+  select?: Prisma.ConsentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Consent
+   */
+  omit?: Prisma.ConsentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConsentInclude<ExtArgs> | null
+  where?: Prisma.ConsentWhereInput
+  orderBy?: Prisma.ConsentOrderByWithRelationInput | Prisma.ConsentOrderByWithRelationInput[]
+  cursor?: Prisma.ConsentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConsentScalarFieldEnum | Prisma.ConsentScalarFieldEnum[]
 }
 
 /**

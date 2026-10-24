@@ -42,7 +42,8 @@ moderationRouter.post(
     try {
       const userId = req.authUser!.id;
       const input = ResolveSchema.parse(req.body);
-      const report = await prisma.report.findUnique({ where: { id: req.params.id } });
+      const reportId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+      const report = await prisma.report.findUnique({ where: { id: reportId } });
       if (!report) return next(notFound('report not found'));
       if (report.status !== 'SUBMITTED') {
         return res.json({ report: { id: report.id, status: report.status } });

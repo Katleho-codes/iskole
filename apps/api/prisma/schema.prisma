@@ -15,40 +15,44 @@ datasource db {
 // Do not hand-write those tables. Regenerate after changing the auth config.
 
 model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  role          String?   @default("STUDENT")
-  banned        Boolean?  @default(false)
-  banReason     String?
-  banExpires    DateTime?
-  sessions      Session[]
-  accounts      Account[]
-  securityEvents SecurityEvent[]
-  auditLogs     AuditLog[]
-  profile       Profile?
-  companyProfile CompanyProfile?
-  guardianConsent GuardianConsent?
-  preferences   Preference?
-  subjectMarks  SubjectMark[]
-  applications  Application[]
-  idempotencyKeys IdempotencyKey[]
-  expenses      Expense[]
-  budgets       Budget[]
-  studyPlans    StudyPlan[]
-  bookings      Booking[]
-  messages      Message[]
-  reports       Report[]
-  blockedUsers  UserBlock[]     @relation("BlockedUser")
-  blockingUsers UserBlock[]     @relation("BlockingUser")
-  mutedCommunities CommunityMute[]
-  conversationsAsInitiator Conversation[] @relation("ConversationInitiator")
-  conversationsAsRecipient Conversation[] @relation("ConversationRecipient")
-  directMessages DirectMessage[]
+  id                       String           @id
+  name                     String
+  email                    String
+  emailVerified            Boolean          @default(false)
+  image                    String?
+  createdAt                DateTime         @default(now())
+  updatedAt                DateTime         @updatedAt
+  role                     String?          @default("STUDENT")
+  banned                   Boolean?         @default(false)
+  banReason                String?
+  banExpires               DateTime?
+  sessions                 Session[]
+  accounts                 Account[]
+  securityEvents           SecurityEvent[]
+  auditLogs                AuditLog[]
+  profile                  Profile?
+  companyProfile           CompanyProfile?
+  guardianConsent          GuardianConsent?
+  preferences              Preference?
+  subjectMarks             SubjectMark[]
+  applications             Application[]
+  idempotencyKeys          IdempotencyKey[]
+  expenses                 Expense[]
+  budgets                  Budget[]
+  studyPlans               StudyPlan[]
+  bookings                 Booking[]
+  messages                 Message[]
+  reports                  Report[]
+  blockedUsers             UserBlock[]      @relation("BlockedUser")
+  blockingUsers            UserBlock[]      @relation("BlockingUser")
+  mutedCommunities         CommunityMute[]
+  conversationsAsInitiator Conversation[]   @relation("ConversationInitiator")
+  conversationsAsRecipient Conversation[]   @relation("ConversationRecipient")
+  directMessages           DirectMessage[]
+  savedFunding             SavedFunding[]
+  notifications            Notification[]
+  moneyPlan                MoneyPlan?
+  consents                 Consent[]
 
   @@unique([email])
   @@map("user")
@@ -159,24 +163,24 @@ model IdempotencyKey {
 }
 
 model Profile {
-  id        String   @id @default(cuid())
-  userId    String   @unique
-  fullName  String?
-  phone     String?
-  province  String?
+  id                  String    @id @default(cuid())
+  userId              String    @unique
+  fullName            String?
+  phone               String?
+  province            String?
   qualificationStatus String?
-  grade     Int?
+  grade               Int?
   schoolQualification String?
-  interests String?
+  interests           String?
   /// POPIA age gate: the date of birth is collected before applying or opting in to company
   /// visibility. Stored as a date, not a derived age, because age changes over time.
-  dateOfBirth DateTime?
-  consentedAt DateTime?
+  dateOfBirth         DateTime?
+  consentedAt         DateTime?
   /// POPIA: off by default. A learner turns this on explicitly before companies can see them.
-  talentVisible Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  talentVisible       Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("profile")
 }
@@ -212,30 +216,30 @@ model GuardianConsent {
 }
 
 model Preference {
-  id        String   @id @default(cuid())
-  userId    String   @unique
-  fields    String[]
-  provinces String[]
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  fields        String[]
+  provinces     String[]
   budgetCeiling Int?
-  studyMode String?
-  language  String   @default("en")
-  lowDataMode Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  studyMode     String?
+  language      String   @default("en")
+  lowDataMode   Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("preference")
 }
 
 model SubjectMark {
-  id        String   @id @default(cuid())
-  userId    String
-  subject   String
-  mark      Int
-  isHomeLanguage Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String   @id @default(cuid())
+  userId         String
+  subject        String
+  mark           Int
+  isHomeLanguage Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, subject])
   @@index([userId])
@@ -256,21 +260,21 @@ model Institution {
 }
 
 model Course {
-  id            String   @id @default(cuid())
+  id            String              @id @default(cuid())
   institutionId String
-  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  institution   Institution         @relation(fields: [institutionId], references: [id], onDelete: Cascade)
   name          String
   code          String?
   faculty       String?
   field         String
   qualification String?
   duration      String?
-  apsMin        Int      @default(0)
+  apsMin        Int                 @default(0)
   tuitionMin    Int?
   tuitionMax    Int?
   description   String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
   requirements  CourseRequirement[]
   applications  Application[]
 
@@ -292,18 +296,18 @@ model CourseRequirement {
 }
 
 model Application {
-  id          String   @id @default(cuid())
+  id          String             @id @default(cuid())
   userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   courseId    String
-  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  status      String   @default("DRAFT")
+  course      Course             @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  status      String             @default("DRAFT")
   idNumberEnc String?
   idNumberIv  String?
   idNumberTag String?
   submittedAt DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
   events      ApplicationEvent[]
   documents   Document[]
   offerLetter OfferLetter?
@@ -352,24 +356,25 @@ model OfferLetter {
 }
 
 model FundingOption {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  provider    String
-  type        String
-  description String?
-  eligibility String?
-  benefits    String?
-  coversTuition Boolean @default(false)
-  coversAccommodation Boolean @default(false)
-  coversBooks Boolean @default(false)
-  coversAllowance Boolean @default(false)
-  amountMin   Int?
-  amountMax   Int?
-  deadline    DateTime?
-  website     String?
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                  String         @id @default(cuid())
+  name                String         @unique
+  provider            String
+  type                String
+  description         String?
+  eligibility         String?
+  benefits            String?
+  coversTuition       Boolean        @default(false)
+  coversAccommodation Boolean        @default(false)
+  coversBooks         Boolean        @default(false)
+  coversAllowance     Boolean        @default(false)
+  amountMin           Int?
+  amountMax           Int?
+  deadline            DateTime?
+  website             String?
+  isActive            Boolean        @default(true)
+  createdAt           DateTime       @default(now())
+  saved               SavedFunding[]
+  updatedAt           DateTime       @updatedAt
 
   @@map("fundingOption")
 }
@@ -384,6 +389,7 @@ model Expense {
   category    String
   amountCents Int
   description String?
+  remindMe    Boolean  @default(false)
   spentAt     DateTime @default(now())
   createdAt   DateTime @default(now())
 
@@ -443,6 +449,7 @@ model Booking {
   slotId    String
   slot      ClinicSlot @relation(fields: [slotId], references: [id], onDelete: Cascade)
   userId    String
+  reason    String?
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   status    String     @default("CONFIRMED")
   createdAt DateTime   @default(now())
@@ -453,12 +460,12 @@ model Booking {
 }
 
 model Community {
-  id          String         @id @default(cuid())
-  name        String         @unique
+  id          String          @id @default(cuid())
+  name        String          @unique
   field       String?
   description String?
   createdById String?
-  createdAt   DateTime       @default(now())
+  createdAt   DateTime        @default(now())
   messages    Message[]
   mutedUsers  CommunityMute[]
 
@@ -480,12 +487,12 @@ model Message {
 }
 
 model UserBlock {
-  id         String   @id @default(cuid())
-  blockerId  String
-  blocker    User     @relation("BlockingUser", fields: [blockerId], references: [id], onDelete: Cascade)
-  blockedId  String
-  blocked    User     @relation("BlockedUser", fields: [blockedId], references: [id], onDelete: Cascade)
-  createdAt  DateTime @default(now())
+  id        String   @id @default(cuid())
+  blockerId String
+  blocker   User     @relation("BlockingUser", fields: [blockerId], references: [id], onDelete: Cascade)
+  blockedId String
+  blocked   User     @relation("BlockedUser", fields: [blockedId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 
   @@unique([blockerId, blockedId])
   @@index([blockedId])
@@ -507,13 +514,13 @@ model CommunityMute {
 }
 
 model Conversation {
-  id          String   @id @default(cuid())
+  id          String          @id @default(cuid())
   initiatorId String
-  initiator   User     @relation("ConversationInitiator", fields: [initiatorId], references: [id], onDelete: Cascade)
+  initiator   User            @relation("ConversationInitiator", fields: [initiatorId], references: [id], onDelete: Cascade)
   recipientId String
-  recipient   User     @relation("ConversationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  recipient   User            @relation("ConversationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
   messages    DirectMessage[]
 
   @@unique([initiatorId, recipientId])
@@ -538,9 +545,9 @@ model DirectMessage {
 /// A learner's report of a message, user or community. Stores no copy of the reported
 /// content: the moderator reads the original record, and the report itself stays small.
 model Report {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   reporterId   String
-  reporter     User     @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  reporter     User      @relation(fields: [reporterId], references: [id], onDelete: Cascade)
   targetType   String
   targetId     String
   reason       String
@@ -548,9 +555,64 @@ model Report {
   resolution   String?
   resolvedById String?
   resolvedAt   DateTime?
-  status       String   @default("SUBMITTED")
-  createdAt    DateTime @default(now())
+  status       String    @default("SUBMITTED")
+  createdAt    DateTime  @default(now())
 
   @@index([status, createdAt])
   @@map("report")
+}
+
+model SavedFunding {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fundingOptionId String
+  fundingOption   FundingOption @relation(fields: [fundingOptionId], references: [id], onDelete: Cascade)
+  createdAt       DateTime      @default(now())
+
+  @@unique([userId, fundingOptionId])
+  @@index([userId])
+  @@map("savedFunding")
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  body      String
+  href      String?
+  dedupeKey String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@unique([userId, dedupeKey])
+  @@index([userId, createdAt])
+  @@index([userId, readAt])
+  @@map("notification")
+}
+
+model MoneyPlan {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  paydayDay Int      @default(25)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("moneyPlan")
+}
+
+model Consent {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  purpose       String
+  policyVersion String
+  grantedAt     DateTime  @default(now())
+  revokedAt     DateTime?
+
+  @@index([userId, purpose])
+  @@map("consent")
 }

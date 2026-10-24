@@ -68,7 +68,7 @@ blocksRouter.post('/blocks', requireSession, async (req, res, next) => {
 blocksRouter.delete('/blocks/:userId', requireSession, async (req, res, next) => {
   try {
     const userId = req.authUser!.id;
-    const blockedId = req.params.userId;
+    const blockedId = Array.isArray(req.params.userId) ? req.params.userId[0] : req.params.userId;
     await prisma.userBlock.deleteMany({ where: { blockerId: userId, blockedId } });
     res.status(204).send();
   } catch (error) {
