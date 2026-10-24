@@ -166,6 +166,26 @@ export type Community = Prisma.CommunityModel
  */
 export type Message = Prisma.MessageModel
 /**
+ * Model UserBlock
+ * 
+ */
+export type UserBlock = Prisma.UserBlockModel
+/**
+ * Model CommunityMute
+ * 
+ */
+export type CommunityMute = Prisma.CommunityMuteModel
+/**
+ * Model Conversation
+ * 
+ */
+export type Conversation = Prisma.ConversationModel
+/**
+ * Model DirectMessage
+ * 
+ */
+export type DirectMessage = Prisma.DirectMessageModel
+/**
  * Model Report
  * A learner's report of a message, user or community. Stores no copy of the reported
  * content: the moderator reads the original record, and the report itself stays small.

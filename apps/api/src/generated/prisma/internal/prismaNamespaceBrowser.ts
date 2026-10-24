@@ -79,6 +79,10 @@ export const ModelName = {
   Booking: 'Booking',
   Community: 'Community',
   Message: 'Message',
+  UserBlock: 'UserBlock',
+  CommunityMute: 'CommunityMute',
+  Conversation: 'Conversation',
+  DirectMessage: 'DirectMessage',
   Report: 'Report'
 } as const
 
@@ -488,12 +492,60 @@ export const MessageScalarFieldEnum = {
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
+export const UserBlockScalarFieldEnum = {
+  id: 'id',
+  blockerId: 'blockerId',
+  blockedId: 'blockedId',
+  createdAt: 'createdAt'
+} as const
+
+export type UserBlockScalarFieldEnum = (typeof UserBlockScalarFieldEnum)[keyof typeof UserBlockScalarFieldEnum]
+
+
+export const CommunityMuteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  communityId: 'communityId',
+  mutedUntil: 'mutedUntil',
+  createdAt: 'createdAt'
+} as const
+
+export type CommunityMuteScalarFieldEnum = (typeof CommunityMuteScalarFieldEnum)[keyof typeof CommunityMuteScalarFieldEnum]
+
+
+export const ConversationScalarFieldEnum = {
+  id: 'id',
+  initiatorId: 'initiatorId',
+  recipientId: 'recipientId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]
+
+
+export const DirectMessageScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  senderId: 'senderId',
+  body: 'body',
+  createdAt: 'createdAt',
+  readAt: 'readAt'
+} as const
+
+export type DirectMessageScalarFieldEnum = (typeof DirectMessageScalarFieldEnum)[keyof typeof DirectMessageScalarFieldEnum]
+
+
 export const ReportScalarFieldEnum = {
   id: 'id',
   reporterId: 'reporterId',
   targetType: 'targetType',
   targetId: 'targetId',
   reason: 'reason',
+  evidence: 'evidence',
+  resolution: 'resolution',
+  resolvedById: 'resolvedById',
+  resolvedAt: 'resolvedAt',
   status: 'status',
   createdAt: 'createdAt'
 } as const

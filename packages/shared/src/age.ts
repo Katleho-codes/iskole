@@ -40,6 +40,10 @@ export function isMinor(dateOfBirth: Date, now = new Date()): boolean {
   return ageInYears(dateOfBirth, now) < ADULT_AGE;
 }
 
+export function isAdult(dateOfBirth: Date, now = new Date()): boolean {
+  return ageInYears(dateOfBirth, now) >= ADULT_AGE;
+}
+
 /** The latest date of birth that is still 18 or older today. Useful as a query cutoff. */
 export function adultCutoff(now = new Date()): Date {
   return new Date(

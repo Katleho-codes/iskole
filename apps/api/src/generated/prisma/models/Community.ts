@@ -191,6 +191,7 @@ export type CommunityWhereInput = {
   createdById?: Prisma.StringNullableFilter<"Community"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Community"> | Date | string
   messages?: Prisma.MessageListRelationFilter
+  mutedUsers?: Prisma.CommunityMuteListRelationFilter
 }
 
 export type CommunityOrderByWithRelationInput = {
@@ -201,6 +202,7 @@ export type CommunityOrderByWithRelationInput = {
   createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   messages?: Prisma.MessageOrderByRelationAggregateInput
+  mutedUsers?: Prisma.CommunityMuteOrderByRelationAggregateInput
 }
 
 export type CommunityWhereUniqueInput = Prisma.AtLeast<{
@@ -214,6 +216,7 @@ export type CommunityWhereUniqueInput = Prisma.AtLeast<{
   createdById?: Prisma.StringNullableFilter<"Community"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Community"> | Date | string
   messages?: Prisma.MessageListRelationFilter
+  mutedUsers?: Prisma.CommunityMuteListRelationFilter
 }, "id" | "name">
 
 export type CommunityOrderByWithAggregationInput = {
@@ -248,6 +251,7 @@ export type CommunityCreateInput = {
   createdById?: string | null
   createdAt?: Date | string
   messages?: Prisma.MessageCreateNestedManyWithoutCommunityInput
+  mutedUsers?: Prisma.CommunityMuteCreateNestedManyWithoutCommunityInput
 }
 
 export type CommunityUncheckedCreateInput = {
@@ -258,6 +262,7 @@ export type CommunityUncheckedCreateInput = {
   createdById?: string | null
   createdAt?: Date | string
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCommunityInput
+  mutedUsers?: Prisma.CommunityMuteUncheckedCreateNestedManyWithoutCommunityInput
 }
 
 export type CommunityUpdateInput = {
@@ -268,6 +273,7 @@ export type CommunityUpdateInput = {
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.MessageUpdateManyWithoutCommunityNestedInput
+  mutedUsers?: Prisma.CommunityMuteUpdateManyWithoutCommunityNestedInput
 }
 
 export type CommunityUncheckedUpdateInput = {
@@ -278,6 +284,7 @@ export type CommunityUncheckedUpdateInput = {
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.MessageUncheckedUpdateManyWithoutCommunityNestedInput
+  mutedUsers?: Prisma.CommunityMuteUncheckedUpdateManyWithoutCommunityNestedInput
 }
 
 export type CommunityCreateManyInput = {
@@ -353,6 +360,20 @@ export type CommunityUpdateOneRequiredWithoutMessagesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CommunityUpdateToOneWithWhereWithoutMessagesInput, Prisma.CommunityUpdateWithoutMessagesInput>, Prisma.CommunityUncheckedUpdateWithoutMessagesInput>
 }
 
+export type CommunityCreateNestedOneWithoutMutedUsersInput = {
+  create?: Prisma.XOR<Prisma.CommunityCreateWithoutMutedUsersInput, Prisma.CommunityUncheckedCreateWithoutMutedUsersInput>
+  connectOrCreate?: Prisma.CommunityCreateOrConnectWithoutMutedUsersInput
+  connect?: Prisma.CommunityWhereUniqueInput
+}
+
+export type CommunityUpdateOneRequiredWithoutMutedUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.CommunityCreateWithoutMutedUsersInput, Prisma.CommunityUncheckedCreateWithoutMutedUsersInput>
+  connectOrCreate?: Prisma.CommunityCreateOrConnectWithoutMutedUsersInput
+  upsert?: Prisma.CommunityUpsertWithoutMutedUsersInput
+  connect?: Prisma.CommunityWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CommunityUpdateToOneWithWhereWithoutMutedUsersInput, Prisma.CommunityUpdateWithoutMutedUsersInput>, Prisma.CommunityUncheckedUpdateWithoutMutedUsersInput>
+}
+
 export type CommunityCreateWithoutMessagesInput = {
   id?: string
   name: string
@@ -360,6 +381,7 @@ export type CommunityCreateWithoutMessagesInput = {
   description?: string | null
   createdById?: string | null
   createdAt?: Date | string
+  mutedUsers?: Prisma.CommunityMuteCreateNestedManyWithoutCommunityInput
 }
 
 export type CommunityUncheckedCreateWithoutMessagesInput = {
@@ -369,6 +391,7 @@ export type CommunityUncheckedCreateWithoutMessagesInput = {
   description?: string | null
   createdById?: string | null
   createdAt?: Date | string
+  mutedUsers?: Prisma.CommunityMuteUncheckedCreateNestedManyWithoutCommunityInput
 }
 
 export type CommunityCreateOrConnectWithoutMessagesInput = {
@@ -394,6 +417,7 @@ export type CommunityUpdateWithoutMessagesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mutedUsers?: Prisma.CommunityMuteUpdateManyWithoutCommunityNestedInput
 }
 
 export type CommunityUncheckedUpdateWithoutMessagesInput = {
@@ -403,6 +427,63 @@ export type CommunityUncheckedUpdateWithoutMessagesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mutedUsers?: Prisma.CommunityMuteUncheckedUpdateManyWithoutCommunityNestedInput
+}
+
+export type CommunityCreateWithoutMutedUsersInput = {
+  id?: string
+  name: string
+  field?: string | null
+  description?: string | null
+  createdById?: string | null
+  createdAt?: Date | string
+  messages?: Prisma.MessageCreateNestedManyWithoutCommunityInput
+}
+
+export type CommunityUncheckedCreateWithoutMutedUsersInput = {
+  id?: string
+  name: string
+  field?: string | null
+  description?: string | null
+  createdById?: string | null
+  createdAt?: Date | string
+  messages?: Prisma.MessageUncheckedCreateNestedManyWithoutCommunityInput
+}
+
+export type CommunityCreateOrConnectWithoutMutedUsersInput = {
+  where: Prisma.CommunityWhereUniqueInput
+  create: Prisma.XOR<Prisma.CommunityCreateWithoutMutedUsersInput, Prisma.CommunityUncheckedCreateWithoutMutedUsersInput>
+}
+
+export type CommunityUpsertWithoutMutedUsersInput = {
+  update: Prisma.XOR<Prisma.CommunityUpdateWithoutMutedUsersInput, Prisma.CommunityUncheckedUpdateWithoutMutedUsersInput>
+  create: Prisma.XOR<Prisma.CommunityCreateWithoutMutedUsersInput, Prisma.CommunityUncheckedCreateWithoutMutedUsersInput>
+  where?: Prisma.CommunityWhereInput
+}
+
+export type CommunityUpdateToOneWithWhereWithoutMutedUsersInput = {
+  where?: Prisma.CommunityWhereInput
+  data: Prisma.XOR<Prisma.CommunityUpdateWithoutMutedUsersInput, Prisma.CommunityUncheckedUpdateWithoutMutedUsersInput>
+}
+
+export type CommunityUpdateWithoutMutedUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  field?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messages?: Prisma.MessageUpdateManyWithoutCommunityNestedInput
+}
+
+export type CommunityUncheckedUpdateWithoutMutedUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  field?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messages?: Prisma.MessageUncheckedUpdateManyWithoutCommunityNestedInput
 }
 
 
@@ -412,10 +493,12 @@ export type CommunityUncheckedUpdateWithoutMessagesInput = {
 
 export type CommunityCountOutputType = {
   messages: number
+  mutedUsers: number
 }
 
 export type CommunityCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   messages?: boolean | CommunityCountOutputTypeCountMessagesArgs
+  mutedUsers?: boolean | CommunityCountOutputTypeCountMutedUsersArgs
 }
 
 /**
@@ -435,6 +518,13 @@ export type CommunityCountOutputTypeCountMessagesArgs<ExtArgs extends runtime.Ty
   where?: Prisma.MessageWhereInput
 }
 
+/**
+ * CommunityCountOutputType without action
+ */
+export type CommunityCountOutputTypeCountMutedUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CommunityMuteWhereInput
+}
+
 
 export type CommunitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -444,6 +534,7 @@ export type CommunitySelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   createdById?: boolean
   createdAt?: boolean
   messages?: boolean | Prisma.Community$messagesArgs<ExtArgs>
+  mutedUsers?: boolean | Prisma.Community$mutedUsersArgs<ExtArgs>
   _count?: boolean | Prisma.CommunityCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["community"]>
 
@@ -477,6 +568,7 @@ export type CommunitySelectScalar = {
 export type CommunityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "field" | "description" | "createdById" | "createdAt", ExtArgs["result"]["community"]>
 export type CommunityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   messages?: boolean | Prisma.Community$messagesArgs<ExtArgs>
+  mutedUsers?: boolean | Prisma.Community$mutedUsersArgs<ExtArgs>
   _count?: boolean | Prisma.CommunityCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CommunityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -486,6 +578,7 @@ export type $CommunityPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   name: "Community"
   objects: {
     messages: Prisma.$MessagePayload<ExtArgs>[]
+    mutedUsers: Prisma.$CommunityMutePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -889,6 +982,7 @@ readonly fields: CommunityFieldRefs;
 export interface Prisma__CommunityClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   messages<T extends Prisma.Community$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Community$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  mutedUsers<T extends Prisma.Community$mutedUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Community$mutedUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommunityMutePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1338,6 +1432,30 @@ export type Community$messagesArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.MessageScalarFieldEnum | Prisma.MessageScalarFieldEnum[]
+}
+
+/**
+ * Community.mutedUsers
+ */
+export type Community$mutedUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommunityMute
+   */
+  select?: Prisma.CommunityMuteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CommunityMute
+   */
+  omit?: Prisma.CommunityMuteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommunityMuteInclude<ExtArgs> | null
+  where?: Prisma.CommunityMuteWhereInput
+  orderBy?: Prisma.CommunityMuteOrderByWithRelationInput | Prisma.CommunityMuteOrderByWithRelationInput[]
+  cursor?: Prisma.CommunityMuteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CommunityMuteScalarFieldEnum | Prisma.CommunityMuteScalarFieldEnum[]
 }
 
 /**
