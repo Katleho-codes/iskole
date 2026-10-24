@@ -105,6 +105,7 @@ const navGroups: NavGroup[] = [
     items: [
       { href: '/notifications', label: 'Notifications', icon: Bell },
       { href: '/privacy', label: 'Privacy', icon: ShieldCheck },
+      { href: '/moderation', label: 'Moderation', icon: ShieldCheck },
     ],
   },
 ];

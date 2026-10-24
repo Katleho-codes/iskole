@@ -5,12 +5,15 @@ export const metadata = { title: 'Messages' };
 export default function MessagesPage() {
   return (
     <div className="space-y-6">
-      <PageHeader title="Messages" description="Direct messages are disabled for this build." />
+      <PageHeader
+        title="Messages"
+        description="Direct 1:1 conversations with block and under-18 safeguards enforced."
+      />
       <EmptyState
         illustration="notifications"
-        title="No messages"
-        body="Messaging is turned off to reduce risk. Use applications and offers to track contact."
-        action={{ href: '/dashboard', label: 'Back to dashboard' }}
+        title="Direct messages"
+        body="Create and view conversations via the API. Block and age restrictions are enforced server-side."
+        action={{ href: '/communities', label: 'Browse communities' }}
       />
     </div>
   );
