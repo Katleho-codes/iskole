@@ -616,3 +616,4 @@ model Consent {
   @@index([userId, purpose])
   @@map("consent")
 }
+

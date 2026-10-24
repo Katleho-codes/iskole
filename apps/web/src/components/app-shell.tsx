@@ -101,6 +101,12 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
+    label: 'Tools',
+    items: [
+      { href: '/cv', label: 'CV', icon: FileText },
+    ],
+  },
+  {
     label: 'Account',
     items: [
       { href: '/notifications', label: 'Notifications', icon: Bell },
@@ -193,14 +199,41 @@ function NavLink({ item, pathname, onNavigate, badge }: { item: NavItem; pathnam
   );
 }
 
-function SidebarNav({ pathname, onNavigate, unreadCount }: { pathname: string; onNavigate?: () => void; unreadCount: number }) {
+function filterNavGroups(groups: NavGroup[], role?: string) {
+  if (role === 'ADMIN' || role === 'MODERATOR') {
+    return [
+      {
+        label: 'Management',
+        items: [
+          { href: '/communities', label: 'Communities', icon: Users },
+          { href: '/messages', label: 'Messages', icon: MessageCircle },
+          { href: '/moderation', label: 'Moderation', icon: ShieldCheck },
+          { href: '/company', label: 'Companies', icon: Users },
+        ],
+      },
+      {
+        label: 'Account',
+        items: [
+          { href: '/notifications', label: 'Notifications', icon: Bell },
+          { href: '/privacy', label: 'Privacy', icon: ShieldCheck },
+          { href: '/profile', label: 'Profile', icon: UserRound },
+        ],
+      },
+    ];
+  }
+  return groups;
+}
+
+function SidebarNav({ pathname, onNavigate, unreadCount, role }: { pathname: string; onNavigate?: () => void; unreadCount: number; role?: string }) {
+  const groups = filterNavGroups(navGroups, role);
+
   return (
     <nav aria-label="Main" className="flex flex-1 flex-col gap-4 overflow-y-auto px-2.5 py-4">
       <div className="space-y-1">
         <NavLink item={topNav} pathname={pathname} onNavigate={onNavigate} />
       </div>
 
-      {navGroups.map((group) => (
+      {groups.map((group) => (
         <div key={group.label} className="space-y-1">
           <p className="px-3 pb-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
             {group.label}
@@ -211,15 +244,17 @@ function SidebarNav({ pathname, onNavigate, unreadCount }: { pathname: string; o
         </div>
       ))}
 
-      <div className="mt-auto rounded-[10px] border border-border bg-mist/70 p-3.5">
-        <div className="flex items-center gap-2 text-xs font-semibold text-primary">
-          <Sparkles className="size-4" aria-hidden="true" />
-          Demo account
+      {role !== 'ADMIN' && role !== 'MODERATOR' ? (
+        <div className="mt-auto rounded-[10px] border border-border bg-mist/70 p-3.5">
+          <div className="flex items-center gap-2 text-xs font-semibold text-primary">
+            <Sparkles className="size-4" aria-hidden="true" />
+            Demo account
+          </div>
+          <p className="mt-1.5 text-xs leading-5 text-muted-foreground">
+            Seeded data makes the journey explorable. Your own account starts clean.
+          </p>
         </div>
-        <p className="mt-1.5 text-xs leading-5 text-muted-foreground">
-          Seeded data makes the journey explorable. Your own account starts clean.
-        </p>
-      </div>
+      ) : null}
     </nav>
   );
 }
@@ -229,6 +264,7 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
   const [mobileOpen, setMobileOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const displayName = user.name || 'Learner';
+  const role = user.role;
 
   useEffect(() => {
     let cancelled = false;
@@ -259,7 +295,7 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
         <div className="flex h-16 items-center px-5">
           <Brand />
         </div>
-        <SidebarNav pathname={pathname} unreadCount={unreadCount} />
+        <SidebarNav pathname={pathname} unreadCount={unreadCount} role={role} />
         <div className="border-t border-border p-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -319,7 +355,7 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
                   </SheetTitle>
                   <SheetDescription className="sr-only">Main navigation</SheetDescription>
                 </SheetHeader>
-                <SidebarNav pathname={pathname} onNavigate={() => setMobileOpen(false)} unreadCount={unreadCount} />
+                <SidebarNav pathname={pathname} onNavigate={() => setMobileOpen(false)} unreadCount={unreadCount} role={role} />
                 <div className="border-t border-border p-4">
                   <Link
                     href="/profile"
@@ -344,7 +380,7 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
 
           <div className="hidden items-center gap-2 text-sm text-muted-foreground lg:flex">
             <span className="size-1.5 rounded-full bg-leaf" aria-hidden="true" />
-            Your next step is waiting on Home
+            {role === 'ADMIN' || role === 'MODERATOR' ? 'Admin console' : 'Your next step is waiting on Home'}
           </div>
 
           <div className="flex items-center gap-2">
@@ -399,7 +435,10 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
         className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 px-2 pb-[max(env(safe-area-inset-bottom),0.5rem)] pt-1.5 backdrop-blur lg:hidden"
       >
         <div className="mx-auto grid max-w-md grid-cols-5">
-          {mobileNav.map((item) => {
+          {(role === 'ADMIN' || role === 'MODERATOR'
+            ? [topNav, { href: '/communities', label: 'Communities', icon: Users }, { href: '/messages', label: 'Messages', icon: MessageCircle }, { href: '/moderation', label: 'Moderation', icon: ShieldCheck }]
+            : mobileNav
+          ).map((item) => {
             const active = isActive(pathname, item);
             const Icon = item.icon;
             return (

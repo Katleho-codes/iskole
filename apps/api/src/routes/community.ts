@@ -12,7 +12,7 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import { FIELDS_OF_STUDY } from '@iskole/shared';
-import { requireSession } from '../middleware/auth';
+import { requireRole, requireSession } from '../middleware/auth';
 import { idempotent } from '../middleware/idempotency';
 import { prisma } from '../lib/prisma';
 import { notFound, HttpError } from '../lib/http-error';
@@ -48,13 +48,27 @@ const ReportCreateSchema = z
   })
   .strict();
 
-communityRouter.get('/communities', async (_req, res, next) => {
+const CommunityUpdateSchema = z
+  .object({
+    name: z.string().trim().min(3).max(80).optional(),
+    description: z.string().trim().max(500).optional().nullable(),
+    field: z.enum(FIELDS_OF_STUDY).optional().nullable(),
+  })
+  .strict();
+
+communityRouter.get('/communities', requireSession, async (req, res, next) => {
   try {
-    const communities = await prisma.community.findMany({
-      orderBy: { createdAt: 'asc' },
-      take: 100,
-      include: { _count: { select: { messages: true } } },
-    });
+    const userId = req.authUser!.id;
+    const [communities, preferences] = await Promise.all([
+      prisma.community.findMany({
+        orderBy: { createdAt: 'asc' },
+        take: 100,
+        include: { _count: { select: { messages: true } } },
+      }),
+      prisma.preference.findUnique({ where: { userId }, select: { fields: true } }),
+    ]);
+
+    const userFields = new Set(preferences?.fields || []);
 
     res.json({
       communities: communities.map((community) => ({
@@ -64,6 +78,7 @@ communityRouter.get('/communities', async (_req, res, next) => {
         description: community.description,
         messageCount: community._count.messages,
         createdAt: community.createdAt,
+        recommended: community.field ? userFields.has(community.field) : false,
       })),
     });
   } catch (error) {
@@ -74,6 +89,7 @@ communityRouter.get('/communities', async (_req, res, next) => {
 communityRouter.post(
   '/communities',
   requireSession,
+  requireRole('ADMIN'),
   idempotent(),
   async (req, res, next) => {
     try {
@@ -96,6 +112,7 @@ communityRouter.post(
           description: community.description,
           messageCount: 0,
           createdAt: community.createdAt,
+          recommended: false,
         },
       });
     } catch (error) {
@@ -103,6 +120,56 @@ communityRouter.post(
       if (code === 'P2002') {
         return next(new HttpError(409, 'a community with that name already exists'));
       }
+      next(error);
+    }
+  },
+);
+
+communityRouter.patch(
+  '/communities/:id',
+  requireSession,
+  requireRole('ADMIN'),
+  async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const input = CommunityUpdateSchema.parse(req.body);
+      const community = await prisma.community.update({
+        where: { id },
+        data: {
+          ...(input.name !== undefined ? { name: input.name } : {}),
+          ...(input.description !== undefined ? { description: input.description } : {}),
+          ...(input.field !== undefined ? { field: input.field } : {}),
+        },
+      });
+      res.json({
+        community: {
+          id: community.id,
+          name: community.name,
+          field: community.field,
+          description: community.description,
+          createdAt: community.createdAt,
+        },
+      });
+    } catch (error) {
+      const code = (error as { code?: string }).code;
+      if (code === 'P2002') {
+        return next(new HttpError(409, 'a community with that name already exists'));
+      }
+      next(error);
+    }
+  },
+);
+
+communityRouter.delete(
+  '/communities/:id',
+  requireSession,
+  requireRole('ADMIN'),
+  async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      await prisma.community.delete({ where: { id } });
+      res.json({ ok: true });
+    } catch (error) {
       next(error);
     }
   },

@@ -75,11 +75,25 @@ function toPreferenceResponse(preference: {
 profileRouter.get(
     "/profile",
     requireSession,
-    requireRole("STUDENT"),
     async (req, res, next) => {
         try {
+            const role = req.authUser!.role;
+            if (role !== "STUDENT") {
+                return res.json({
+                    profile: {
+                        fullName: req.authUser!.name || null,
+                        phone: null,
+                        province: null,
+                        qualificationStatus: null,
+                        grade: null,
+                        schoolQualification: null,
+                        interests: null,
+                        dateOfBirth: null,
+                        consentedAt: null,
+                    },
+                });
+            }
             const profile = await getOrCreateProfile(req.authUser!.id);
-            console.log("profile", profile);
             res.json({ profile: toProfileResponse(profile) });
         } catch (error) {
             next(error);
@@ -125,9 +139,21 @@ profileRouter.put(
 profileRouter.get(
     "/preferences",
     requireSession,
-    requireRole("STUDENT"),
     async (req, res, next) => {
         try {
+            const role = req.authUser!.role;
+            if (role !== "STUDENT") {
+                return res.json({
+                    preferences: {
+                        fields: [],
+                        provinces: [],
+                        budgetCeiling: null,
+                        studyMode: null,
+                        language: "en",
+                        lowDataMode: false,
+                    },
+                });
+            }
             const preference = await getOrCreatePreferences(req.authUser!.id);
             res.json({ preferences: toPreferenceResponse(preference) });
         } catch (error) {

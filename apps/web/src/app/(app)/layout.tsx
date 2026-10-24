@@ -14,7 +14,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
 
   // A session issued before verification was required can still exist. Keep that stale
   // session out of the app instead of letting every API call fail with 403.
-  if (!user.emailVerified) redirect('/verify-email?error=unverified');
+  // if (!user.emailVerified) redirect('/verify-email?error=unverified');
 
   return <AppShell user={user}>{children}</AppShell>;
 }

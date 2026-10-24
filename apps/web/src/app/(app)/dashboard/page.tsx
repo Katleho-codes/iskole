@@ -16,6 +16,7 @@ import { Progress } from '@/components/ui/progress';
 import { EmptyState, ErrorState, StatCard, StatusBadge } from '@/components/page-parts';
 import { getDict } from '@/i18n/strings';
 import { serverApi } from '@/lib/server-api';
+import { AdminDashboard } from '@/components/admin-dashboard';
 
 type Dashboard = {
   learner: { firstName: string; fullName: string };
@@ -75,7 +76,7 @@ function shortDate(value: string | null) {
 }
 
 export default async function DashboardPage() {
-  const result = await serverApi<Dashboard>('/api/dashboard');
+  const result = await serverApi<any>('/api/dashboard');
   if (!result.ok && result.status === 401) redirect('/signin');
   if (!result.ok || !result.data) {
     return (
@@ -87,7 +88,11 @@ export default async function DashboardPage() {
     );
   }
 
-  const data = result.data;
+  if (result.data.type === 'admin') {
+    return <AdminDashboard data={result.data.admin} />;
+  }
+
+  const data = result.data as Dashboard;
   const currentIndex = data.journey.findIndex((step) => !step.complete);
   const completeCount = data.journey.filter((step) => step.complete).length;
   const budgetProgress =

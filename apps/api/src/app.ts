@@ -40,6 +40,8 @@ import { studyPlansRouter } from './routes/study-plans';
 import { blocksRouter } from './routes/blocks';
 import { conversationsRouter } from './routes/conversations';
 import moderationRouter from './routes/moderation';
+import { usersRouter } from './routes/users';
+import { cvRouter } from './routes/cv';
 
 export function createApp() {
   const app = express();
@@ -83,6 +85,8 @@ export function createApp() {
   app.use('/api', blocksRouter);
   app.use('/api', conversationsRouter);
   app.use('/api', moderationRouter);
+  app.use('/api', usersRouter);
+  app.use('/api', cvRouter);
 
   app.use(errorHandler);
   return app;

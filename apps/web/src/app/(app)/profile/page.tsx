@@ -169,7 +169,7 @@ export default function ProfilePage() {
     <div className="space-y-6">
       <PageHeader
         title="Your profile"
-        description="These details decide which courses and funding options we can match you to. Keep them up to date so matches stay accurate."
+        description="Manage your account details and profile information."
         action={
           <Button asChild variant="outline" size="sm">
             <Link href="/dashboard">Back to dashboard</Link>
