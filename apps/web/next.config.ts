@@ -1,4 +1,11 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import type { NextConfig } from "next";
+
+const repoRoot = path.resolve(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "../..",
+);
 
 const apiInternalUrl = process.env.API_INTERNAL_URL ?? "http://localhost:8004";
 
@@ -20,6 +27,7 @@ const nextConfig: NextConfig = {
         ];
     },
     output: "standalone",
+    outputFileTracingRoot: repoRoot,
 };
 
 export default nextConfig;

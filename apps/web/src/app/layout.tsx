@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   description: 'From "what do I study" to funded, accepted and on track.',
   applicationName: 'iskole',
 };
-
+export const dynamic = 'force-dynamic';
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
