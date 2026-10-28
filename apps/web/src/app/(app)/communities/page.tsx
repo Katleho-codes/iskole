@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { FIELDS_OF_STUDY } from '@iskole/shared';
+import { postJson } from '@/lib/api-client';
 
 type Community = {
   id: string;
@@ -51,7 +52,7 @@ export default function CommunitiesPage() {
         const session = await sessionRes.json();
         setUser(session.user || {});
       }
-    } catch (e) {
+    } catch {
       // ignore
     } finally {
       setLoading(false);
@@ -61,22 +62,16 @@ export default function CommunitiesPage() {
   async function createCommunity() {
     setSaving(true);
     try {
-      const res = await fetch('/api/communities', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: form.name,
-          description: form.description || undefined,
-          field: form.field || undefined,
-        }),
+      await postJson('/api/communities', {
+        name: form.name,
+        description: form.description || undefined,
+        field: form.field || undefined,
       });
-      if (res.ok) {
-        setCreateOpen(false);
-        setForm({ name: '', description: '', field: '' });
-        load();
-      }
-    } catch (e) {
-      // ignore
+      setCreateOpen(false);
+      setForm({ name: '', description: '', field: '' });
+      load();
+    } catch {
+      // Keep the dialog open so the admin can correct the name and try again.
     } finally {
       setSaving(false);
     }
@@ -87,7 +82,7 @@ export default function CommunitiesPage() {
     try {
       await fetch(`/api/communities/${id}`, { method: 'DELETE' });
       load();
-    } catch (e) {
+    } catch {
       // ignore
     }
   }

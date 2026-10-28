@@ -87,6 +87,7 @@ export function createApp() {
   app.use('/api', moderationRouter);
   app.use('/api', usersRouter);
   app.use('/api', cvRouter);
+  app.use('/api', offersRouter);
 
   app.use(errorHandler);
   return app;

@@ -131,7 +131,7 @@ communityRouter.patch(
   requireRole('ADMIN'),
   async (req, res, next) => {
     try {
-      const id = req.params.id;
+      const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
       const input = CommunityUpdateSchema.parse(req.body);
       const community = await prisma.community.update({
         where: { id },
@@ -166,7 +166,7 @@ communityRouter.delete(
   requireRole('ADMIN'),
   async (req, res, next) => {
     try {
-      const id = req.params.id;
+      const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
       await prisma.community.delete({ where: { id } });
       res.json({ ok: true });
     } catch (error) {

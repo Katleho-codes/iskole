@@ -1,41 +1,15 @@
-import { expect, test, type APIRequestContext, type Page } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 /**
  * M5 (money, nudges, wellness) and M6 (privacy centre, notifications) in a real browser.
  *
- * A fresh learner is created through the real sign-up and verification flow so the test does
- * not depend on demo rows left over from an earlier run. The payday nudge is triggered from
- * the Money page, which proves the demo trigger, the notification list and the sidebar badge
- * in one pass. The account is deleted through the Privacy centre at the end.
+ * A fresh learner is created through the real sign-up flow so the test does not depend on
+ * demo rows left over from an earlier run. The payday nudge is triggered from the Money
+ * page, which proves the demo trigger, the notification list and the sidebar badge in one
+ * pass. The account is deleted through the Privacy centre at the end.
  */
 
-async function verificationUrl(request: APIRequestContext, email: string): Promise<string> {
-  for (let attempt = 0; attempt < 30; attempt += 1) {
-    const list = await request.get('http://localhost:8025/api/v1/messages');
-    if (list.ok()) {
-      const data = (await list.json()) as {
-        messages?: Array<{ ID: string; Subject: string; To?: Array<{ Address?: string }> }>;
-      };
-      const message = data.messages?.find(
-        (candidate) =>
-          candidate.Subject === 'Verify your iskole email' &&
-          candidate.To?.some((recipient) => recipient.Address === email),
-      );
-      if (message) {
-        const detail = await request.get(`http://localhost:8025/api/v1/message/${message.ID}`);
-        if (detail.ok()) {
-          const body = (await detail.json()) as { Text?: string };
-          const url = body.Text?.match(/https?:\/\/\S+/)?.[0];
-          if (url) return url;
-        }
-      }
-    }
-    await new Promise((resolve) => setTimeout(resolve, 500));
-  }
-  throw new Error(`no verification email arrived for ${email}`);
-}
-
-async function createVerifiedLearner(page: Page, request: APIRequestContext) {
+async function createVerifiedLearner(page: Page) {
   const unique = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
   const email = `m5m6-${unique}@example.test`;
   const password = 'iskole-m5-m6-password-123';
@@ -47,9 +21,7 @@ async function createVerifiedLearner(page: Page, request: APIRequestContext) {
   await page.getByLabel('Password', { exact: true }).fill(password);
   await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: 'Create account', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Check your email' })).toBeVisible();
-
-  await page.goto(await verificationUrl(request, email));
+  // Email verification is off, so sign-up goes straight to date-of-birth onboarding.
   await page.waitForURL(/\/profile\?onboarding=1/);
 
   return { email, password };
@@ -57,9 +29,8 @@ async function createVerifiedLearner(page: Page, request: APIRequestContext) {
 
 test('money, wellness, notifications and the privacy centre work for a learner', async ({
   page,
-  request,
 }) => {
-  const { email } = await createVerifiedLearner(page, request);
+  const { email } = await createVerifiedLearner(page);
 
   // ---- M5: Money -----------------------------------------------------------------
   await page.goto('/money');

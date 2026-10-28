@@ -9,12 +9,14 @@ export const usersRouter = Router();
 
 usersRouter.get('/users/search', requireSession, async (req, res, next) => {
   try {
+    const userId = req.authUser!.id;
     const email = String(req.query.email || '').trim().toLowerCase();
     if (!email) {
       return res.json({ users: [] });
     }
     const users = await prisma.user.findMany({
       where: {
+        id: { not: userId },
         email: {
           contains: email,
           mode: 'insensitive',

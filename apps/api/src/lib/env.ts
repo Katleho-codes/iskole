@@ -4,13 +4,16 @@
  * Template: .env.example at the repo root.
  */
 import { config } from "dotenv";
-import { z } from "zod";
 import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+import { z } from "zod";
 
-// Load the repo-root .env regardless of the directory the process was started from.
-// quiet: a missing .env is normal in tests and CI, env vars come from the runner there.
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load repo-root .env (apps/api/src/lib -> up 4 levels)
 config({
-    path: fileURLToPath(new URL("../../../../.env", import.meta.url)),
+    path: resolve(__dirname, "../../../..", ".env"),
     quiet: true,
 });
 

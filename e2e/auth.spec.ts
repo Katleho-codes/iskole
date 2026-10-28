@@ -1,45 +1,17 @@
-import { expect, test, type APIRequestContext } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 /**
  * Authentication smoke test in a real browser.
  *
- * It proves the pieces the API tests cannot: sign-up sends a real verification email, the
- * link signs the learner in, the session cookie set by better-auth survives the Next
- * rewrite, and clearing cookies really does sign the learner out.
- *
- * Mailpit is a documented local dependency (`pnpm dev:db`). The test reads the message over
- * Mailpit's HTTP API rather than bypassing verification in the app.
+ * It proves the pieces the API tests cannot: sign-up creates a live session immediately
+ * (email verification is intentionally off for the hackathon), the cookie set by
+ * better-auth survives the Next rewrite, and clearing cookies really does sign the learner
+ * out.
  */
-async function verificationUrl(request: APIRequestContext, email: string): Promise<string> {
-  for (let attempt = 0; attempt < 30; attempt += 1) {
-    const list = await request.get('http://localhost:8025/api/v1/messages');
-    if (list.ok()) {
-      const data = (await list.json()) as {
-        messages?: Array<{ ID: string; Subject: string; To?: Array<{ Address?: string }> }>;
-      };
-      const message = data.messages?.find(
-        (candidate) =>
-          candidate.Subject === 'Verify your iskole email' &&
-          candidate.To?.some((recipient) => recipient.Address === email),
-      );
-      if (message) {
-        const detail = await request.get(`http://localhost:8025/api/v1/message/${message.ID}`);
-        if (detail.ok()) {
-          const body = (await detail.json()) as { Text?: string };
-          const url = body.Text?.match(/https?:\/\/\S+/)?.[0];
-          if (url) return url;
-        }
-      }
-    }
-    await new Promise((resolve) => setTimeout(resolve, 500));
-  }
-  throw new Error(`no verification email arrived for ${email}`);
-}
 
-test('a learner can sign up, verify, reach the dashboard and sign back in', async ({
+test('a learner can sign up, reach the dashboard and sign back in', async ({
   page,
   context,
-  request,
 }) => {
   const unique = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
   const email = `e2e-${unique}@example.test`;
@@ -53,12 +25,8 @@ test('a learner can sign up, verify, reach the dashboard and sign back in', asyn
   await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: 'Create account', exact: true }).click();
 
-  await expect(page.getByRole('heading', { name: 'Check your email' })).toBeVisible();
-
-  // Open the real link from Mailpit. better-auth verifies the token, creates a session and
-  // follows the callback to the one onboarding field it could not store before the account
-  // existed (date of birth). The dashboard is one navigation away, with a live session.
-  await page.goto(await verificationUrl(request, email));
+  // Verification is disabled, so the new account lands on the onboarding field that could
+  // not be stored before the account existed: date of birth.
   await page.waitForURL(/\/profile\?onboarding=1/);
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Your profile');
 

@@ -190,7 +190,7 @@ export function ErrorState({
       role="alert"
       className="flex flex-col items-center justify-center rounded-[10px] border border-danger/25 bg-danger-soft/50 px-6 py-10 text-center"
     >
-      <span className="flex size-10 items-center justify-center rounded-full bg-white text-danger">
+      <span className="flex size-10 items-center justify-center rounded-full bg-card text-danger dark:bg-muted">
         <AlertCircle className="size-5" aria-hidden="true" />
       </span>
       <h2 className="mt-3 text-base font-semibold text-foreground">{title}</h2>

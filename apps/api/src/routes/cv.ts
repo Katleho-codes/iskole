@@ -120,7 +120,9 @@ Keep it professional, South African context appropriate, focus on strengths. Do 
                     throw new Error("AI request failed");
                 }
 
-                const data = await response.json();
+                const data = (await response.json()) as {
+                    choices?: Array<{ message?: { content?: string } }>;
+                };
                 const content = data.choices?.[0]?.message?.content || "{}";
                 let cv;
                 try {

@@ -17,12 +17,12 @@ type AdminDashboardData = {
 export function AdminDashboard({ data }: { data: AdminDashboardData }) {
   return (
     <div className="space-y-6">
-      <section className="overflow-hidden rounded-[10px] bg-navy px-5 py-6 text-white sm:px-7 sm:py-8">
+      <section className="overflow-hidden rounded-[10px] bg-navy px-5 py-6 text-white dark:bg-card dark:text-foreground dark:border dark:border-border sm:px-7 sm:py-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-[58ch]">
-            <p className="text-xs font-medium uppercase tracking-[0.12em] text-white/65">Admin Console</p>
+            <p className="text-xs font-medium uppercase tracking-[0.12em] text-white/65 dark:text-muted-foreground">Admin Console</p>
             <h1 className="mt-2 text-[2rem] font-semibold leading-tight sm:text-[2.5rem]">System Overview</h1>
-            <p className="mt-3 text-sm leading-6 text-white/80 sm:text-base">
+            <p className="mt-3 text-sm leading-6 text-white/80 dark:text-muted-foreground sm:text-base">
               Manage users, companies, communities, reports and platform operations.
             </p>
           </div>

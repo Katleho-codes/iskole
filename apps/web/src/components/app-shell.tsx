@@ -55,6 +55,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 type NavItem = {
   href: string;
@@ -384,6 +385,7 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
           </div>
 
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <Button asChild variant="outline" size="sm" className="hidden rounded-full sm:inline-flex">
               <Link href="/privacy">Privacy</Link>
             </Button>

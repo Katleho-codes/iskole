@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { headers } from 'next/headers';
 import { Cabin, Montserrat } from 'next/font/google';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Toaster } from '@/components/ui/sonner';
 import './globals.css';
+import { ThemeProvider } from '@/components/theme-provider';
 
 const display = Montserrat({
   subsets: ['latin'],
@@ -27,9 +29,16 @@ export const metadata: Metadata = {
   applicationName: 'iskole',
 };
 export const dynamic = 'force-dynamic';
-export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  // The proxy issues a per-request nonce. next-themes injects an inline script to set the
+  // theme before paint, so it needs the nonce too or strict CSP blocks it.
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
+
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
+    // next-themes' pre-paint script sets the class and `color-scheme` on <html> before
+    // React hydrates, so the element is intentionally different from the server snapshot.
+    // React's documented escape hatch is suppressHydrationWarning on the element itself.
+    <html lang="en" suppressHydrationWarning className={`${display.variable} ${body.variable}`}>
       <body className="min-h-screen bg-background text-foreground antialiased">
         <a
           href="#main-content"
@@ -37,8 +46,16 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         >
           Skip to content
         </a>
-        <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
-        <Toaster position="top-center" richColors closeButton />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+          nonce={nonce}
+        >
+          <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
+          <Toaster position="top-center" richColors closeButton />
+        </ThemeProvider>
       </body>
     </html>
   );
